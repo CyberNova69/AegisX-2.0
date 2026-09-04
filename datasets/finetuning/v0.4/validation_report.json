@@ -1,0 +1,176 @@
+{
+  "audit_timestamp": "2026-09-03T09:16:43.354388+00:00",
+  "dataset_version": "0.4",
+  "audit_passed": true,
+  "total_records": 3000,
+  "splits": {
+    "train": 2400,
+    "validation": 300,
+    "test": 300
+  },
+  "templates": {
+    "total": 150,
+    "train": 120,
+    "validation": 15,
+    "test": 15
+  },
+  "template_leakage": {
+    "train_val_overlap": 0,
+    "train_test_overlap": 0,
+    "val_test_overlap": 0,
+    "zero_leakage": true
+  },
+  "exact_duplicates": 0,
+  "near_duplicates": 0,
+  "class_distribution": {
+    "confirmed_malicious": 600,
+    "benign": 600,
+    "insufficient_evidence": 600,
+    "likely_malicious": 600,
+    "suspicious": 600
+  },
+  "os_distribution": {
+    "Linux": 900,
+    "Windows": 2100
+  },
+  "evidence_types_count": 18,
+  "mitre_techniques_count": 34,
+  "borderline_records_count": 1760,
+  "keyword_entropy": {
+    "powershell": {
+      "entropy": 2.2125823032160294,
+      "classes": [
+        "likely_malicious",
+        "benign",
+        "confirmed_malicious",
+        "insufficient_evidence",
+        "suspicious"
+      ],
+      "counts": {
+        "likely_malicious": 120,
+        "benign": 80,
+        "confirmed_malicious": 120,
+        "insufficient_evidence": 60,
+        "suspicious": 40
+      }
+    },
+    "cmd": {
+      "entropy": 2.1139299283220243,
+      "classes": [
+        "confirmed_malicious",
+        "likely_malicious",
+        "benign",
+        "insufficient_evidence",
+        "suspicious"
+      ],
+      "counts": {
+        "confirmed_malicious": 440,
+        "likely_malicious": 220,
+        "benign": 200,
+        "insufficient_evidence": 60,
+        "suspicious": 240
+      }
+    },
+    "sudo": {
+      "entropy": 1.4056390622295665,
+      "classes": [
+        "confirmed_malicious",
+        "suspicious",
+        "benign"
+      ],
+      "counts": {
+        "confirmed_malicious": 60,
+        "suspicious": 80,
+        "benign": 20
+      }
+    },
+    "ssh": {
+      "entropy": 1.974937501201927,
+      "classes": [
+        "suspicious",
+        "confirmed_malicious",
+        "benign",
+        "likely_malicious"
+      ],
+      "counts": {
+        "suspicious": 40,
+        "confirmed_malicious": 40,
+        "benign": 60,
+        "likely_malicious": 40
+      }
+    },
+    "curl": {
+      "entropy": 1.9502120649147465,
+      "classes": [
+        "likely_malicious",
+        "confirmed_malicious",
+        "suspicious",
+        "benign"
+      ],
+      "counts": {
+        "likely_malicious": 40,
+        "confirmed_malicious": 20,
+        "suspicious": 40,
+        "benign": 40
+      }
+    },
+    "wmi": {
+      "entropy": 1.584962500721156,
+      "classes": [
+        "likely_malicious",
+        "confirmed_malicious",
+        "suspicious"
+      ],
+      "counts": {
+        "likely_malicious": 20,
+        "confirmed_malicious": 20,
+        "suspicious": 20
+      }
+    },
+    "certutil": {
+      "entropy": 2.2516291673878226,
+      "classes": [
+        "insufficient_evidence",
+        "benign",
+        "likely_malicious",
+        "confirmed_malicious",
+        "suspicious"
+      ],
+      "counts": {
+        "insufficient_evidence": 20,
+        "benign": 20,
+        "likely_malicious": 40,
+        "confirmed_malicious": 20,
+        "suspicious": 20
+      }
+    },
+    "rundll32": {
+      "entropy": 1.9219280948873623,
+      "classes": [
+        "benign",
+        "confirmed_malicious",
+        "likely_malicious",
+        "insufficient_evidence"
+      ],
+      "counts": {
+        "benign": 20,
+        "confirmed_malicious": 20,
+        "likely_malicious": 40,
+        "insufficient_evidence": 20
+      }
+    },
+    "scheduled_task": {
+      "entropy": 1.5304930567574824,
+      "classes": [
+        "benign",
+        "insufficient_evidence",
+        "suspicious"
+      ],
+      "counts": {
+        "benign": 80,
+        "insufficient_evidence": 60,
+        "suspicious": 40
+      }
+    }
+  }
+}

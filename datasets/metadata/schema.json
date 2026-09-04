@@ -1,0 +1,345 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AegisX SOC Dataset Record",
+  "description": "Schema for a single synthetic SOC dataset record used for LLM evaluation, agent evaluation, prompt development, and future fine-tuning.",
+  "type": "object",
+  "required": ["id", "task", "input", "output", "metadata"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^SOC-[0-9]{6}$",
+      "description": "Unique record identifier in the format SOC-XXXXXX"
+    },
+    "task": {
+      "type": "string",
+      "enum": [
+        "alert_triage",
+        "investigation_planning",
+        "evidence_analysis",
+        "mitre_mapping",
+        "incident_summarization",
+        "threat_intelligence",
+        "response_recommendation"
+      ],
+      "description": "The SOC task type this record represents"
+    },
+    "input": {
+      "type": "object",
+      "required": ["alert", "context", "evidence"],
+      "additionalProperties": false,
+      "properties": {
+        "alert": {
+          "type": "object",
+          "required": ["title", "severity", "source"],
+          "properties": {
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Short descriptive title of the alert"
+            },
+            "severity": {
+              "type": "string",
+              "enum": ["informational", "low", "medium", "high", "critical"],
+              "description": "Alert severity level"
+            },
+            "source": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The detection source that generated this alert (e.g., EDR, SIEM, IDS)"
+            },
+            "timestamp": {
+              "type": "string",
+              "description": "ISO 8601 timestamp of when the alert was generated"
+            },
+            "rule_name": {
+              "type": "string",
+              "description": "Name of the detection rule that triggered"
+            },
+            "rule_id": {
+              "type": "string",
+              "description": "Identifier of the detection rule"
+            }
+          }
+        },
+        "context": {
+          "type": "object",
+          "properties": {
+            "hostname": {
+              "type": "string",
+              "description": "The endpoint hostname involved"
+            },
+            "username": {
+              "type": "string",
+              "description": "The user account involved"
+            },
+            "ip_address": {
+              "type": "string",
+              "description": "Source or destination IP address"
+            },
+            "department": {
+              "type": "string",
+              "description": "Organizational department"
+            },
+            "asset_criticality": {
+              "type": "string",
+              "enum": ["low", "medium", "high", "critical"],
+              "description": "Business criticality of the affected asset"
+            },
+            "environment": {
+              "type": "string",
+              "enum": ["production", "staging", "development", "corporate", "dmz"],
+              "description": "Network environment"
+            },
+            "os": {
+              "type": "string",
+              "description": "Operating system of the endpoint"
+            },
+            "previous_incidents": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Number of previous security incidents involving this host/user"
+            }
+          }
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "type", "description"],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^EVT-[0-9]{3,6}$",
+                "description": "Unique evidence identifier in the format EVT-XXX to EVT-XXXXXX"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "process_creation",
+                  "network_connection",
+                  "file_modification",
+                  "registry_modification",
+                  "authentication",
+                  "dns_query",
+                  "email",
+                  "firewall_log",
+                  "proxy_log",
+                  "scheduled_task",
+                  "service_creation",
+                  "wmi_activity",
+                  "powershell_log",
+                  "sysmon_event",
+                  "threat_intel_match",
+                  "vulnerability_scan",
+                  "user_report",
+                  "other"
+                ],
+                "description": "Type of evidence"
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Human-readable description of the evidence"
+              },
+              "timestamp": {
+                "type": "string",
+                "description": "ISO 8601 timestamp of the event"
+              },
+              "raw_data": {
+                "type": "object",
+                "description": "Structured raw data for this evidence item (process details, network details, etc.)"
+              }
+            }
+          },
+          "description": "Array of evidence items supporting this alert"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "required": ["classification", "confidence", "findings"],
+      "properties": {
+        "classification": {
+          "type": "string",
+          "enum": [
+            "benign",
+            "suspicious",
+            "likely_malicious",
+            "confirmed_malicious",
+            "insufficient_evidence"
+          ],
+          "description": "Overall classification of the alert/incident"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Confidence score between 0.0 and 1.0"
+        },
+        "findings": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["description", "evidence_refs"],
+            "properties": {
+              "description": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Description of the finding"
+              },
+              "evidence_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1,
+                "description": "List of evidence IDs that support this finding"
+              },
+              "severity": {
+                "type": "string",
+                "enum": ["informational", "low", "medium", "high", "critical"]
+              }
+            }
+          },
+          "description": "Analysis findings, each grounded in specific evidence"
+        },
+        "rationale": {
+          "type": "string",
+          "description": "Brief explanation of the overall classification decision"
+        },
+        "mitre_techniques": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["technique_id", "technique_name"],
+            "properties": {
+              "technique_id": {
+                "type": "string",
+                "pattern": "^T[0-9]{4}(\\.[0-9]{3})?$",
+                "description": "MITRE ATT&CK technique ID"
+              },
+              "technique_name": {
+                "type": "string",
+                "description": "Human-readable technique name"
+              },
+              "tactic": {
+                "type": "string",
+                "description": "MITRE ATT&CK tactic"
+              },
+              "evidence_refs": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Evidence IDs supporting this technique mapping"
+              }
+            }
+          },
+          "description": "Mapped MITRE ATT&CK techniques"
+        },
+        "recommended_actions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["action", "priority"],
+            "properties": {
+              "action": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Recommended response action"
+              },
+              "priority": {
+                "type": "string",
+                "enum": ["immediate", "high", "medium", "low"],
+                "description": "Action priority"
+              },
+              "rationale": {
+                "type": "string",
+                "description": "Why this action is recommended"
+              }
+            }
+          },
+          "description": "Recommended response actions"
+        },
+        "investigation_steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["step", "purpose"],
+            "properties": {
+              "step": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Description of the investigation step"
+              },
+              "purpose": {
+                "type": "string",
+                "minLength": 1,
+                "description": "What this step aims to determine"
+              },
+              "data_sources": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Data sources to query for this step"
+              }
+            }
+          },
+          "description": "Suggested investigation steps"
+        },
+        "summary": {
+          "type": "string",
+          "description": "Executive summary of the incident or analysis"
+        },
+        "additional_evidence_needed": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Types of additional evidence that would improve the analysis"
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["source", "generator", "review_status", "dataset_version"],
+      "properties": {
+        "source": {
+          "type": "string",
+          "enum": ["synthetic"],
+          "description": "Data source — must be 'synthetic' for generated data"
+        },
+        "generator": {
+          "type": "string",
+          "description": "Name of the generator that produced this record"
+        },
+        "review_status": {
+          "type": "string",
+          "enum": ["pending", "approved", "rejected", "needs_revision"],
+          "description": "Human review status"
+        },
+        "dataset_version": {
+          "type": "string",
+          "description": "Version of the dataset schema"
+        },
+        "quality_score": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Automated semantic quality score from 0 to 100"
+        },
+        "reviewer_notes": {
+          "type": "string",
+          "description": "Optional human reviewer comments"
+        },
+        "created_at": {
+          "type": "string",
+          "description": "ISO 8601 timestamp of record creation"
+        },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Optional tags for categorization"
+        }
+      }
+    }
+  }
+}

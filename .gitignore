@@ -1,0 +1,62 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# ===== Virtual Environments =====
+.venv/
+venv/
+ENV/
+
+# ===== IDE / Editor =====
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== Environment / Secrets =====
+.env
+.env.local
+*.pem
+*.key
+
+# ===== AegisX Project =====
+# Large generated datasets (keep small test outputs)
+datasets/generated/*.jsonl
+!datasets/generated/.gitkeep
+
+# Model checkpoints and weights (future phases)
+models/
+checkpoints/
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.gguf
+
+# Experiment outputs
+experiments/runs/
+experiments/logs/
+
+# Evaluation reports (generated)
+reports/
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# Logs
+*.log
+logs/

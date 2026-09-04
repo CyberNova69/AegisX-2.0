@@ -1,0 +1,12 @@
+# AegisX - Phase 1: Dataset Foundation
+# =====================================
+# No third-party dependencies required.
+# The dataset pipeline uses only the Python standard library.
+#
+# Optional (for reading YAML configuration files):
+# pyyaml>=6.0
+#
+# Future phases will add dependencies as needed:
+# - Phase 2 (LLM Interface): openai, httpx
+# - Phase 6 (RAG): sentence-transformers, chromadb
+# - Phase 10 (Fine-tuning): torch, transformers, peft, bitsandbytes

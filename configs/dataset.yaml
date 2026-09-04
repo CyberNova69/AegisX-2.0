@@ -1,0 +1,31 @@
+# AegisX Dataset Configuration
+# =============================
+
+dataset:
+  version: "0.2"
+  name: "aegisx-soc-synthetic"
+  description: "Synthetic SOC dataset for LLM evaluation, agent evaluation, and future fine-tuning"
+
+paths:
+  generated: "datasets/generated"
+  raw: "datasets/raw"
+  reviewed: "datasets/reviewed"
+  train: "datasets/train"
+  validation: "datasets/validation"
+  test: "datasets/test"
+  metadata: "datasets/metadata"
+
+generation:
+  default_output: "datasets/generated/soc_examples.jsonl"
+  default_count: 100
+  default_seed: 42
+
+validation:
+  strict_mode: true
+  warn_on_imbalance: true
+  max_duplicate_ratio: 0.05
+
+lifecycle:
+  # Generated → Validated → Human Review → Train/Val/Test
+  initial_review_status: "pending"
+  require_review_before_training: true

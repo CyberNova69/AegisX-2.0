@@ -1,0 +1,19 @@
+# AegisX Model Configuration
+# ===========================
+# Non-secret provider and model settings. Secrets belong in .env.
+
+provider:
+  name: "mock"                # Provider type: 'mock', 'api', or 'local'
+
+model:
+  name: "mock-soc-analyst-v1" # Model identifier
+
+generation:
+  temperature: 0.2           # Sampling temperature (0.0 = deterministic, 1.0 = creative)
+  max_tokens: 2048           # Maximum completion length
+  timeout: 30.0              # Request timeout in seconds
+  max_retries: 3             # Retry attempts for transient errors
+  retry_delay: 1.0           # Base retry delay in seconds (exponential backoff)
+
+api:
+  base_url: "https://api.openai.com/v1" # Base URL for API requests (OpenAI / OpenRouter / Local vLLM)

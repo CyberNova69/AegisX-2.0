@@ -1,0 +1,51 @@
+# AegisX Dataset Generation Configuration
+# =========================================
+# Controls the distribution and composition of generated synthetic SOC data.
+
+# Task distribution for 100 examples
+task_distribution:
+  alert_triage: 20
+  investigation_planning: 20
+  mitre_mapping: 15
+  evidence_analysis: 15
+  incident_summarization: 10
+  threat_intelligence: 10
+  response_recommendation: 10
+
+# Classification distribution (approximate percentages)
+# Ensures the dataset includes benign, suspicious, malicious, and ambiguous examples
+classification_distribution:
+  benign: 20
+  suspicious: 25
+  likely_malicious: 20
+  confirmed_malicious: 20
+  insufficient_evidence: 15
+
+# Severity distribution (approximate percentages)
+severity_distribution:
+  informational: 10
+  low: 20
+  medium: 30
+  high: 25
+  critical: 15
+
+# Evidence configuration
+evidence:
+  min_per_record: 1
+  max_per_record: 8
+  typical_per_record: 3
+
+# Metadata defaults
+metadata:
+  source: "synthetic"
+  generator: "aegisx-template-generator"
+  dataset_version: "0.2"
+  review_status: "pending"
+
+# Coherent confidence ranges per classification
+confidence_ranges:
+  benign: [0.75, 0.95]
+  suspicious: [0.40, 0.70]
+  likely_malicious: [0.65, 0.88]
+  confirmed_malicious: [0.88, 0.99]
+  insufficient_evidence: [0.15, 0.45]

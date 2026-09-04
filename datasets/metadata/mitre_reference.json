@@ -1,0 +1,206 @@
+[
+  {
+    "technique_id": "T1059.001",
+    "technique_name": "PowerShell",
+    "tactic": "Execution",
+    "description": "Adversaries may abuse PowerShell commands and scripts for execution, leveraging its access to inner Windows functionality."
+  },
+  {
+    "technique_id": "T1059.003",
+    "technique_name": "Windows Command Shell",
+    "tactic": "Execution",
+    "description": "Adversaries may abuse the Windows command shell (cmd.exe) for execution."
+  },
+  {
+    "technique_id": "T1059.005",
+    "technique_name": "Visual Basic",
+    "tactic": "Execution",
+    "description": "Adversaries may abuse VBScript/Visual Basic scripts for execution."
+  },
+  {
+    "technique_id": "T1059.006",
+    "technique_name": "Python",
+    "tactic": "Execution",
+    "description": "Adversaries may execute malicious Python scripts to perform actions."
+  },
+  {
+    "technique_id": "T1204.002",
+    "technique_name": "Malicious File",
+    "tactic": "Execution",
+    "description": "An end user may rely on opening a malicious attachment or file."
+  },
+  {
+    "technique_id": "T1569.002",
+    "technique_name": "Service Execution",
+    "tactic": "Execution",
+    "description": "Adversaries may abuse the Windows service control manager to execute malicious binaries."
+  },
+  {
+    "technique_id": "T1566.001",
+    "technique_name": "Spearphishing Attachment",
+    "tactic": "Initial Access",
+    "description": "Adversaries may send spearphishing emails with malicious attachments to gain initial access."
+  },
+  {
+    "technique_id": "T1566.002",
+    "technique_name": "Spearphishing Link",
+    "tactic": "Initial Access",
+    "description": "Adversaries may send spearphishing emails with malicious links to gain initial access."
+  },
+  {
+    "technique_id": "T1078",
+    "technique_name": "Valid Accounts",
+    "tactic": "Defense Evasion",
+    "description": "Adversaries may obtain and abuse credentials of existing accounts."
+  },
+  {
+    "technique_id": "T1078.002",
+    "technique_name": "Domain Accounts",
+    "tactic": "Defense Evasion",
+    "description": "Adversaries may abuse domain accounts to maintain access or evade defenses."
+  },
+  {
+    "technique_id": "T1027",
+    "technique_name": "Obfuscated Files or Information",
+    "tactic": "Defense Evasion",
+    "description": "Adversaries may attempt to make an executable or script difficult to analyze."
+  },
+  {
+    "technique_id": "T1027.010",
+    "technique_name": "Command Obfuscation",
+    "tactic": "Defense Evasion",
+    "description": "Adversaries may obfuscate commands to hide intent or bypass string-based detection."
+  },
+  {
+    "technique_id": "T1036.005",
+    "technique_name": "Match Legitimate Name or Location",
+    "tactic": "Defense Evasion",
+    "description": "Adversaries may place malicious files in paths associated with legitimate binaries."
+  },
+  {
+    "technique_id": "T1055",
+    "technique_name": "Process Injection",
+    "tactic": "Defense Evasion",
+    "description": "Adversaries may inject code into processes in order to evade process-based defenses."
+  },
+  {
+    "technique_id": "T1053.005",
+    "technique_name": "Scheduled Task",
+    "tactic": "Persistence",
+    "description": "Adversaries may abuse task scheduling functionality to facilitate initial or recurring execution."
+  },
+  {
+    "technique_id": "T1547.001",
+    "technique_name": "Registry Run Keys",
+    "tactic": "Persistence",
+    "description": "Adversaries may achieve persistence by adding entries to Windows Registry Run keys."
+  },
+  {
+    "technique_id": "T1543.003",
+    "technique_name": "Windows Service",
+    "tactic": "Persistence",
+    "description": "Adversaries may create or modify Windows services to execute malicious commands on system boot."
+  },
+  {
+    "technique_id": "T1003.001",
+    "technique_name": "LSASS Memory",
+    "tactic": "Credential Access",
+    "description": "Adversaries may attempt to access credential material stored in LSASS memory."
+  },
+  {
+    "technique_id": "T1003.003",
+    "technique_name": "NTDS",
+    "tactic": "Credential Access",
+    "description": "Adversaries may attempt to access or copy the Active Directory domain database (ntds.dit)."
+  },
+  {
+    "technique_id": "T1110.001",
+    "technique_name": "Password Guessing",
+    "tactic": "Credential Access",
+    "description": "Adversaries may attempt to systematically guess passwords against accounts."
+  },
+  {
+    "technique_id": "T1110.003",
+    "technique_name": "Password Spraying",
+    "tactic": "Credential Access",
+    "description": "Adversaries may use a single common password against many accounts to avoid lockouts."
+  },
+  {
+    "technique_id": "T1087.002",
+    "technique_name": "Domain Account Discovery",
+    "tactic": "Discovery",
+    "description": "Adversaries may attempt to get a listing of domain accounts."
+  },
+  {
+    "technique_id": "T1018",
+    "technique_name": "Remote System Discovery",
+    "tactic": "Discovery",
+    "description": "Adversaries may attempt to get a listing of other systems by name or IP."
+  },
+  {
+    "technique_id": "T1082",
+    "technique_name": "System Information Discovery",
+    "tactic": "Discovery",
+    "description": "Adversaries may seek detailed information about the operating system and hardware."
+  },
+  {
+    "technique_id": "T1046",
+    "technique_name": "Network Service Discovery",
+    "tactic": "Discovery",
+    "description": "Adversaries may attempt to get a listing of services running on remote hosts."
+  },
+  {
+    "technique_id": "T1021.001",
+    "technique_name": "Remote Desktop Protocol",
+    "tactic": "Lateral Movement",
+    "description": "Adversaries may use valid RDP credentials to connect remotely to internal hosts."
+  },
+  {
+    "technique_id": "T1021.002",
+    "technique_name": "SMB/Windows Admin Shares",
+    "tactic": "Lateral Movement",
+    "description": "Adversaries may use SMB to interact with administrative shares for lateral movement."
+  },
+  {
+    "technique_id": "T1105",
+    "technique_name": "Ingress Tool Transfer",
+    "tactic": "Command and Control",
+    "description": "Adversaries may transfer tools or files into an compromised internal network."
+  },
+  {
+    "technique_id": "T1071.001",
+    "technique_name": "Web Protocols",
+    "tactic": "Command and Control",
+    "description": "Adversaries may communicate using application layer web protocols (HTTP/HTTPS)."
+  },
+  {
+    "technique_id": "T1071.004",
+    "technique_name": "DNS",
+    "tactic": "Command and Control",
+    "description": "Adversaries may communicate using DNS protocol for C2 or data tunneling."
+  },
+  {
+    "technique_id": "T1486",
+    "technique_name": "Data Encrypted for Impact",
+    "tactic": "Impact",
+    "description": "Adversaries may encrypt data on target systems to interrupt availability (Ransomware)."
+  },
+  {
+    "technique_id": "T1490",
+    "technique_name": "Inhibit System Recovery",
+    "tactic": "Impact",
+    "description": "Adversaries may delete or disable shadow copies or backup configurations to hinder recovery."
+  },
+  {
+    "technique_id": "T1048.003",
+    "technique_name": "Exfiltration Over Unencrypted Non-C2 Protocol",
+    "tactic": "Exfiltration",
+    "description": "Adversaries may exfiltrate data over alternative non-C2 protocols."
+  },
+  {
+    "technique_id": "T1567.002",
+    "technique_name": "Exfiltration to Cloud Storage",
+    "tactic": "Exfiltration",
+    "description": "Adversaries may exfiltrate data directly to cloud storage services."
+  }
+]

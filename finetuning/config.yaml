@@ -1,0 +1,63 @@
+# =============================================================================
+# AegisX Fine-Tuning Configuration (v0.1)
+# =============================================================================
+# This file configures QLoRA fine-tuning for the AegisX SOC Triage model.
+#
+# The model name is a PLACEHOLDER. It will be selected after the college GPU
+# preflight confirms available VRAM. Change it with one edit here or via
+# the --model CLI argument.
+#
+# This is a research-ready configuration for a student SOC project.
+# =============================================================================
+
+model:
+  # Model identifier on HuggingFace Hub or local path.
+  # Examples by VRAM budget:
+  #   8 GB VRAM:  "unsloth/Qwen2.5-3B-Instruct-bnb-4bit"
+  #  12 GB VRAM:  "unsloth/Qwen2.5-7B-Instruct-bnb-4bit"
+  #  16 GB VRAM:  "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit"
+  #  24 GB VRAM:  "unsloth/Qwen2.5-14B-Instruct-bnb-4bit"
+  name: "unsloth/Qwen2.5-7B-Instruct-bnb-4bit"
+  revision: null
+  trust_remote_code: false
+  max_seq_length: 2048
+
+training:
+  method: qlora                     # qlora | lora | full (full not recommended)
+  epochs: 3
+  learning_rate: 2.0e-4
+  batch_size: 4                     # Per-device batch size
+  gradient_accumulation_steps: 4    # Effective batch = 4 * 4 = 16
+  warmup_ratio: 0.05
+  weight_decay: 0.01
+  logging_steps: 10
+  evaluation_strategy: epoch
+  save_strategy: epoch
+  seed: 42
+  fp16: false
+  bf16: true                        # Ampere+ GPUs; set false for older GPUs
+  max_grad_norm: 1.0
+  optim: "paged_adamw_8bit"
+
+lora:
+  r: 16                             # LoRA rank
+  alpha: 32                         # LoRA alpha (scaling = alpha / r)
+  dropout: 0.05
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+  bias: "none"
+  task_type: "CAUSAL_LM"
+
+dataset:
+  train: "datasets/finetuning/v0.4/sft/train.jsonl"
+  validation: "datasets/finetuning/v0.4/sft/validation.jsonl"
+  test: "datasets/finetuning/v0.4/test.jsonl"          # Read-only, post-training eval
+  source_train: "datasets/finetuning/v0.4/train.jsonl"
+  source_validation: "datasets/finetuning/v0.4/validation.jsonl"
+
+output:
+  directory: "models/aegisx-triage"
+  reports_directory: "reports/finetuning"

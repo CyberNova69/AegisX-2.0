@@ -1,0 +1,1502 @@
+[
+  {
+    "template_id": "TF-001",
+    "template_name": "Admin SCCM Software Deployment",
+    "domain": "powershell_scripting",
+    "task": "alert_triage",
+    "classification": "benign",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-002",
+    "template_name": "Developer Ad-Hoc Script Off-Hours",
+    "domain": "powershell_scripting",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "train",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-003",
+    "template_name": "Obfuscated PowerShell Download Cradle",
+    "domain": "powershell_scripting",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-004",
+    "template_name": "Macro Document Spawning Encoded PowerShell C2",
+    "domain": "powershell_scripting",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-005",
+    "template_name": "Truncated PowerShell Telemetry",
+    "domain": "powershell_scripting",
+    "task": "alert_triage",
+    "classification": "insufficient_evidence",
+    "split": "train",
+    "borderline_category": "suspicious_vs_insufficient_evidence",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-006",
+    "template_name": "Scheduled Disk Space Maintenance",
+    "domain": "powershell_scripting",
+    "task": "evidence_analysis",
+    "classification": "benign",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-007",
+    "template_name": "PowerShell Memory Patching AMSI Bypass",
+    "domain": "powershell_scripting",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "val",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-008",
+    "template_name": "PowerShell Browser History Exfiltration",
+    "domain": "powershell_scripting",
+    "task": "response_recommendation",
+    "classification": "confirmed_malicious",
+    "split": "test",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-009",
+    "template_name": "Certutil Certificate Hash Verification",
+    "domain": "lotl_tools",
+    "task": "alert_triage",
+    "classification": "benign",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-010",
+    "template_name": "Certutil File Download from Internal IP",
+    "domain": "lotl_tools",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "train",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-011",
+    "template_name": "Certutil Ingress Payload Download from Untrusted Domain",
+    "domain": "lotl_tools",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-012",
+    "template_name": "Certutil Process Logged without Command Line Arguments",
+    "domain": "lotl_tools",
+    "task": "alert_triage",
+    "classification": "insufficient_evidence",
+    "split": "train",
+    "borderline_category": "likely_malicious_vs_insufficient_evidence",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-013",
+    "template_name": "Rundll32 Shell32 Control Panel Applet",
+    "domain": "lotl_tools",
+    "task": "evidence_analysis",
+    "classification": "benign",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-014",
+    "template_name": "Rundll32 Execution of Unsigned DLL from User Profile",
+    "domain": "lotl_tools",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-015",
+    "template_name": "Mshta Executing Remote Malicious HTA",
+    "domain": "lotl_tools",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-016",
+    "template_name": "Bitsadmin Background Download Job by IT Updater",
+    "domain": "lotl_tools",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "test",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-017",
+    "template_name": "Single User Password Mistype Followed by Success",
+    "domain": "authentication_identity",
+    "task": "alert_triage",
+    "classification": "benign",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-018",
+    "template_name": "Multiple Failed Logins Across Departments",
+    "domain": "authentication_identity",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "train",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-019",
+    "template_name": "Password Spray Against 40 Accounts with Single Success",
+    "domain": "authentication_identity",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-020",
+    "template_name": "Service Account Interactive RDP Logon",
+    "domain": "authentication_identity",
+    "task": "response_recommendation",
+    "classification": "confirmed_malicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-021",
+    "template_name": "Account Lockout Burst with Missing Source IP",
+    "domain": "authentication_identity",
+    "task": "investigation_planning",
+    "classification": "insufficient_evidence",
+    "split": "train",
+    "borderline_category": "suspicious_vs_insufficient_evidence",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-022",
+    "template_name": "Kerberos TGS Request by Authorized Exchange Server",
+    "domain": "authentication_identity",
+    "task": "alert_triage",
+    "classification": "benign",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-023",
+    "template_name": "Kerberoasting SPN Ticket Request Anomaly",
+    "domain": "authentication_identity",
+    "task": "mitre_mapping",
+    "classification": "likely_malicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-024",
+    "template_name": "Compromised Domain Admin Credential Abuse",
+    "domain": "authentication_identity",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-025",
+    "template_name": "Registry Run Key Created for Authorized Software",
+    "domain": "persistence_mechanisms",
+    "task": "evidence_analysis",
+    "classification": "benign",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-026",
+    "template_name": "Suspicious Registry Run Key Pointing to VBScript",
+    "domain": "persistence_mechanisms",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-027",
+    "template_name": "Scheduled Task Created by Local Admin for Python Script",
+    "domain": "persistence_mechanisms",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "train",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-028",
+    "template_name": "Malicious Windows Service Installation via Sc.exe",
+    "domain": "persistence_mechanisms",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-029",
+    "template_name": "Service Creation Event Missing Binary Path",
+    "domain": "persistence_mechanisms",
+    "task": "investigation_planning",
+    "classification": "insufficient_evidence",
+    "split": "train",
+    "borderline_category": "suspicious_vs_insufficient_evidence",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-030",
+    "template_name": "Linux Systemd Unit Modified by Sudo User",
+    "domain": "persistence_mechanisms",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "train",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-031",
+    "template_name": "Linux Cron Job Backdoor",
+    "domain": "persistence_mechanisms",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-032",
+    "template_name": "Scheduled Task Name Mismatch Missing Binary Hash",
+    "domain": "persistence_mechanisms",
+    "task": "investigation_planning",
+    "classification": "insufficient_evidence",
+    "split": "train",
+    "borderline_category": "likely_malicious_vs_insufficient_evidence",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-033",
+    "template_name": "Antivirus Filter Altitude Update",
+    "domain": "defense_evasion",
+    "task": "evidence_analysis",
+    "classification": "benign",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-034",
+    "template_name": "CMD Obfuscated with Carets and Substrings",
+    "domain": "defense_evasion",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-035",
+    "template_name": "Process Hollowing into Svchost",
+    "domain": "defense_evasion",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-036",
+    "template_name": "DLL Search Order Hijacking version.dll",
+    "domain": "defense_evasion",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-037",
+    "template_name": "Memory Injection Alert Terminated Before Capture",
+    "domain": "defense_evasion",
+    "task": "alert_triage",
+    "classification": "insufficient_evidence",
+    "split": "train",
+    "borderline_category": "likely_malicious_vs_insufficient_evidence",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-038",
+    "template_name": "Visual Studio Debugger Process Attach",
+    "domain": "defense_evasion",
+    "task": "evidence_analysis",
+    "classification": "benign",
+    "split": "val",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-039",
+    "template_name": "Sysmon Remote Thread Injection Missing Call Stack",
+    "domain": "defense_evasion",
+    "task": "investigation_planning",
+    "classification": "insufficient_evidence",
+    "split": "test",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-040",
+    "template_name": "LSASS Memory Dump via Comsvcs.dll",
+    "domain": "credential_access",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-041",
+    "template_name": "Mimikatz Sekurlsa Logonpasswords Execution",
+    "domain": "credential_access",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-042",
+    "template_name": "Volume Shadow Copy NTDS Read Access",
+    "domain": "credential_access",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "train",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-043",
+    "template_name": "Active Directory System State Scheduled Backup",
+    "domain": "credential_access",
+    "task": "evidence_analysis",
+    "classification": "benign",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-044",
+    "template_name": "Procdump Utility Missing Target Process Arguments",
+    "domain": "credential_access",
+    "task": "alert_triage",
+    "classification": "insufficient_evidence",
+    "split": "train",
+    "borderline_category": "suspicious_vs_insufficient_evidence",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-045",
+    "template_name": "DCSync Directory Replication Abuse",
+    "domain": "credential_access",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "val",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-046",
+    "template_name": "DPAPI Master Key Access Corrupted Audit",
+    "domain": "credential_access",
+    "task": "investigation_planning",
+    "classification": "insufficient_evidence",
+    "split": "train",
+    "borderline_category": "suspicious_vs_insufficient_evidence",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-047",
+    "template_name": "IT Admin Network Troubleshooting Ping Sweep",
+    "domain": "discovery_recon",
+    "task": "alert_triage",
+    "classification": "benign",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-048",
+    "template_name": "Port Scan of DC from Linux Workstation",
+    "domain": "discovery_recon",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "train",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-049",
+    "template_name": "Automated Discovery Commands Sequence",
+    "domain": "discovery_recon",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-050",
+    "template_name": "SYN Flood from Unmanaged Switch Missing Host Data",
+    "domain": "discovery_recon",
+    "task": "investigation_planning",
+    "classification": "insufficient_evidence",
+    "split": "train",
+    "borderline_category": "suspicious_vs_insufficient_evidence",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-051",
+    "template_name": "Linux Auditd Hardware and Service Inventory",
+    "domain": "discovery_recon",
+    "task": "evidence_analysis",
+    "classification": "benign",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-052",
+    "template_name": "Linux Sudoers Enumeration by Web User",
+    "domain": "discovery_recon",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "val",
+    "borderline_category": null,
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-053",
+    "template_name": "AdFind Querying Active Directory Objects",
+    "domain": "discovery_recon",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "test",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-054",
+    "template_name": "PsExec SCCM Deployment Across Workstations",
+    "domain": "lateral_movement",
+    "task": "alert_triage",
+    "classification": "benign",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-055",
+    "template_name": "RDP Off-Hours Multi-Workstations",
+    "domain": "lateral_movement",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "train",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-056",
+    "template_name": "PsExec Lateral Movement to File Server",
+    "domain": "lateral_movement",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-057",
+    "template_name": "WMI Remote Execution on Domain Controller",
+    "domain": "lateral_movement",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-058",
+    "template_name": "SMB C$ Share Connection with Null Session Telemetry",
+    "domain": "lateral_movement",
+    "task": "investigation_planning",
+    "classification": "insufficient_evidence",
+    "split": "train",
+    "borderline_category": "suspicious_vs_insufficient_evidence",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-059",
+    "template_name": "Linux SSH Key Extraction and Lateral Movement",
+    "domain": "lateral_movement",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-060",
+    "template_name": "Unauthenticated SMB Relay Attempt",
+    "domain": "lateral_movement",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-061",
+    "template_name": "Microsoft Update CDN Proxy Traffic",
+    "domain": "network_c2",
+    "task": "alert_triage",
+    "classification": "benign",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-062",
+    "template_name": "High Frequency DNS Queries to Newly Registered Domain",
+    "domain": "network_c2",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "train",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-063",
+    "template_name": "DNS Tunneling Base32 Queries",
+    "domain": "network_c2",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-064",
+    "template_name": "Cobalt Strike HTTPS Beaconing Pattern",
+    "domain": "network_c2",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-065",
+    "template_name": "Proxy User-Agent Alert Missing Destination IP",
+    "domain": "network_c2",
+    "task": "investigation_planning",
+    "classification": "insufficient_evidence",
+    "split": "train",
+    "borderline_category": "suspicious_vs_insufficient_evidence",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-066",
+    "template_name": "Ingress Tool Transfer via Certutil from Pastebin",
+    "domain": "network_c2",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "val",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-067",
+    "template_name": "Tor Exit Node Connection Blocked Host Offline",
+    "domain": "network_c2",
+    "task": "alert_triage",
+    "classification": "insufficient_evidence",
+    "split": "test",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-068",
+    "template_name": "7-Zip Authorized Backup Compression",
+    "domain": "impact_ransomware",
+    "task": "evidence_analysis",
+    "classification": "benign",
+    "split": "val",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-069",
+    "template_name": "Mass File Renaming Spike to .tmp Without Note",
+    "domain": "impact_ransomware",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-070",
+    "template_name": "Volume Shadow Copy Deletion via Vssadmin",
+    "domain": "impact_ransomware",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "train",
+    "borderline_category": "likely_malicious_vs_confirmed_malicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-071",
+    "template_name": "Ransomware Spree with HOW_TO_DECRYPT Note",
+    "domain": "impact_ransomware",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-072",
+    "template_name": "File Integrity Monitor Storage Crash During Spike",
+    "domain": "impact_ransomware",
+    "task": "alert_triage",
+    "classification": "insufficient_evidence",
+    "split": "train",
+    "borderline_category": "likely_malicious_vs_insufficient_evidence",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-073",
+    "template_name": "Bcdedit Recovery Disabled and SafeBoot Alteration",
+    "domain": "impact_ransomware",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "val",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-074",
+    "template_name": "Corporate OneDrive Sync of Office Documents",
+    "domain": "data_exfiltration",
+    "task": "evidence_analysis",
+    "classification": "benign",
+    "split": "test",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-075",
+    "template_name": "Large Upload to Personal Cloud Storage Service",
+    "domain": "data_exfiltration",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "train",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-076",
+    "template_name": "Data Exfiltration over Port 8080 Unencrypted",
+    "domain": "data_exfiltration",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-077",
+    "template_name": "Staged Sensitive Database Dumps Uploaded to Mega",
+    "domain": "data_exfiltration",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-078",
+    "template_name": "NetFlow High Bandwidth Truncated Record",
+    "domain": "data_exfiltration",
+    "task": "investigation_planning",
+    "classification": "insufficient_evidence",
+    "split": "val",
+    "borderline_category": "suspicious_vs_insufficient_evidence",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-079",
+    "template_name": "Linux Apt Package Upgrade",
+    "domain": "linux_telemetry",
+    "task": "evidence_analysis",
+    "classification": "benign",
+    "split": "test",
+    "borderline_category": null,
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-080",
+    "template_name": "SSH Login from Unusual Geolocation",
+    "domain": "linux_telemetry",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "train",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-081",
+    "template_name": "Apache Web Shell Upload c99.php",
+    "domain": "linux_telemetry",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-082",
+    "template_name": "SSH Brute Force Followed by Sudo Escalation",
+    "domain": "linux_telemetry",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-083",
+    "template_name": "UFW Firewall Deny Spike Missing Process Telemetry",
+    "domain": "linux_telemetry",
+    "task": "investigation_planning",
+    "classification": "insufficient_evidence",
+    "split": "train",
+    "borderline_category": "suspicious_vs_insufficient_evidence",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-084",
+    "template_name": "Curl Download to /tmp on Staging Server",
+    "domain": "linux_telemetry",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "val",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-085",
+    "template_name": "Linux Daemon Crash Missing Core Dump",
+    "domain": "linux_telemetry",
+    "task": "investigation_planning",
+    "classification": "insufficient_evidence",
+    "split": "test",
+    "borderline_category": null,
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-086",
+    "template_name": "Phish Macro to PowerShell C2 Staging",
+    "domain": "multi_stage_attack",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-087",
+    "template_name": "Spearphishing LNK to Certutil Download to Rundll32 Execution",
+    "domain": "multi_stage_attack",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-088",
+    "template_name": "Authorized Software Deployment via SCCM and PowerShell",
+    "domain": "multi_stage_attack",
+    "task": "alert_triage",
+    "classification": "benign",
+    "split": "train",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-089",
+    "template_name": "Multi-Host RDP Pivot to NTDS Stealing",
+    "domain": "multi_stage_attack",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-090",
+    "template_name": "Compromised Web Service to Linux Bash Reverse Shell",
+    "domain": "multi_stage_attack",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "val",
+    "borderline_category": null,
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-091",
+    "template_name": "Benign IT Linux System Backup to SFTP",
+    "domain": "multi_stage_attack",
+    "task": "alert_triage",
+    "classification": "benign",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-092",
+    "template_name": "Spearphishing Email with Macro Dropping Executable",
+    "domain": "multi_stage_attack",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-093",
+    "template_name": "Windows Service Creation with PowerShell Download Cradle",
+    "domain": "multi_stage_attack",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "test",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-094",
+    "template_name": "Admin Using PowerShell with Incomplete Audit Trail",
+    "domain": "multi_stage_attack",
+    "task": "investigation_planning",
+    "classification": "insufficient_evidence",
+    "split": "train",
+    "borderline_category": "suspicious_vs_insufficient_evidence",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-095",
+    "template_name": "Linux Cron Job Invoking Curl to Sh Pipe",
+    "domain": "multi_stage_attack",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-096",
+    "template_name": "Automated Security Vulnerability Scanner Network Sweep",
+    "domain": "multi_stage_attack",
+    "task": "alert_triage",
+    "classification": "benign",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-097",
+    "template_name": "Suspicious WMI Process Launch with Missing Arguments",
+    "domain": "multi_stage_attack",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "test",
+    "borderline_category": "suspicious_vs_insufficient_evidence",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-098",
+    "template_name": "PowerShell Execution with Missing Command Line Log",
+    "domain": "incomplete_telemetry",
+    "task": "investigation_planning",
+    "classification": "insufficient_evidence",
+    "split": "train",
+    "borderline_category": "suspicious_vs_insufficient_evidence",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-099",
+    "template_name": "Network Connection from Ephemeral Process with Missing Hash",
+    "domain": "incomplete_telemetry",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-100",
+    "template_name": "Linux Sudo Execution with Truncated Auth Log",
+    "domain": "incomplete_telemetry",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "train",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-101",
+    "template_name": "Firewall Inbound Drop Burst from Unregistered IP",
+    "domain": "incomplete_telemetry",
+    "task": "alert_triage",
+    "classification": "benign",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-102",
+    "template_name": "Scheduled Task Trigger with Corrupted XML Definition",
+    "domain": "incomplete_telemetry",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_insufficient_evidence",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-103",
+    "template_name": "DNS Query Spike with Truncated Response Packet",
+    "domain": "incomplete_telemetry",
+    "task": "investigation_planning",
+    "classification": "insufficient_evidence",
+    "split": "train",
+    "borderline_category": "suspicious_vs_insufficient_evidence",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-104",
+    "template_name": "Service Startup Crash with Missing Error Dump",
+    "domain": "incomplete_telemetry",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "train",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-105",
+    "template_name": "Linux Cron Job Missing Parent Script on Disk",
+    "domain": "incomplete_telemetry",
+    "task": "investigation_planning",
+    "classification": "insufficient_evidence",
+    "split": "train",
+    "borderline_category": "suspicious_vs_insufficient_evidence",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-106",
+    "template_name": "Authentication Event with Corrupted Logon Type",
+    "domain": "incomplete_telemetry",
+    "task": "investigation_planning",
+    "classification": "insufficient_evidence",
+    "split": "val",
+    "borderline_category": "suspicious_vs_insufficient_evidence",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-107",
+    "template_name": "Web Shell Probe with Empty Response Body",
+    "domain": "incomplete_telemetry",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "train",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-108",
+    "template_name": "IT Routine Patch Deployment with PowerShell",
+    "domain": "admin_workflows",
+    "task": "alert_triage",
+    "classification": "benign",
+    "split": "train",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-109",
+    "template_name": "HR Software Installation via MSI Executable",
+    "domain": "admin_workflows",
+    "task": "alert_triage",
+    "classification": "benign",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-110",
+    "template_name": "Linux Devops Ansible Configuration Run",
+    "domain": "admin_workflows",
+    "task": "evidence_analysis",
+    "classification": "benign",
+    "split": "val",
+    "borderline_category": null,
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-111",
+    "template_name": "Finance User Exporting Encrypted CSV to OneDrive",
+    "domain": "admin_workflows",
+    "task": "alert_triage",
+    "classification": "benign",
+    "split": "train",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-112",
+    "template_name": "Disguised Developer Compiling Ransomware Stub in Visual Studio",
+    "domain": "admin_workflows",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-113",
+    "template_name": "Compromised IT Admin Disabling Defender and Tampering Logs",
+    "domain": "admin_workflows",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-114",
+    "template_name": "Unauthorized Docker Container Spawning Crypto Miner",
+    "domain": "admin_workflows",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-115",
+    "template_name": "Attacker Clearing Linux Auditd Logs and Shredding Bash History",
+    "domain": "admin_workflows",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "test",
+    "borderline_category": null,
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-116",
+    "template_name": "Mass File Compression and Staging in Hidden Directory",
+    "domain": "admin_workflows",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-117",
+    "template_name": "Certbot Renewal with Unrecognized Remote CA Certificate",
+    "domain": "admin_workflows",
+    "task": "investigation_planning",
+    "classification": "insufficient_evidence",
+    "split": "train",
+    "borderline_category": "suspicious_vs_insufficient_evidence",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-118",
+    "template_name": "Linux Sudo Privilege Escalation via Sudoers NOPASSWD",
+    "domain": "linux_telemetry",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-119",
+    "template_name": "Linux SSH Brute Force from Tor Exit Node",
+    "domain": "linux_telemetry",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-120",
+    "template_name": "Linux Authorized Systemd Service Deployment by Sysadmin",
+    "domain": "linux_telemetry",
+    "task": "evidence_analysis",
+    "classification": "benign",
+    "split": "train",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-121",
+    "template_name": "Linux User Adding Unauthorized SUID Bit to /bin/bash",
+    "domain": "linux_telemetry",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-122",
+    "template_name": "Linux Kernel Core Dump Generated with Missing Stack Trace",
+    "domain": "linux_telemetry",
+    "task": "investigation_planning",
+    "classification": "insufficient_evidence",
+    "split": "train",
+    "borderline_category": "suspicious_vs_insufficient_evidence",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-123",
+    "template_name": "Linux Package Installation from PPA Repository",
+    "domain": "linux_telemetry",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "train",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-124",
+    "template_name": "Linux Sudoers Modification by Non-Admin Service",
+    "domain": "linux_telemetry",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-125",
+    "template_name": "Linux Bash History Wiped via Unset HISTFILE",
+    "domain": "linux_telemetry",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "train",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-126",
+    "template_name": "Linux PAM Authentication Failure Spike for Invalid Users",
+    "domain": "linux_telemetry",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-127",
+    "template_name": "Linux Cron Job Adding Remote Netcat Listener",
+    "domain": "linux_telemetry",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-128",
+    "template_name": "Linux Systemd Timer Running Nightly Python Security Health Check",
+    "domain": "linux_telemetry",
+    "task": "evidence_analysis",
+    "classification": "benign",
+    "split": "test",
+    "borderline_category": null,
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-129",
+    "template_name": "Linux Kernel Module Loaded with Missing Verification Signature",
+    "domain": "linux_telemetry",
+    "task": "investigation_planning",
+    "classification": "insufficient_evidence",
+    "split": "train",
+    "borderline_category": "suspicious_vs_insufficient_evidence",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-130",
+    "template_name": "Finance Workstation Executing PowerShell Macro from Invoice",
+    "domain": "business_contexts",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-131",
+    "template_name": "HR Workstation Syncing Employee Records to Personal Dropbox",
+    "domain": "business_contexts",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "val",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-132",
+    "template_name": "Developer Workstation Querying AWS Metadata Service",
+    "domain": "business_contexts",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "train",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-133",
+    "template_name": "Domain Controller Receiving Inbound LDAP Query Burst",
+    "domain": "business_contexts",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-134",
+    "template_name": "Database Server Executing XP_CMDSHELL via Admin Logon",
+    "domain": "business_contexts",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-135",
+    "template_name": "Executive Laptop Logging In from Two Geographically Disjoint Locations",
+    "domain": "business_contexts",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-136",
+    "template_name": "Helpdesk Operator Remote Screen Sharing Session via Authorized Tool",
+    "domain": "business_contexts",
+    "task": "alert_triage",
+    "classification": "benign",
+    "split": "train",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-137",
+    "template_name": "Security Analyst Testing Sigma Rules in Isolated Lab",
+    "domain": "business_contexts",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "test",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-138",
+    "template_name": "Software Engineer Testing API Endpoint via Curl Command",
+    "domain": "business_contexts",
+    "task": "evidence_analysis",
+    "classification": "benign",
+    "split": "train",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-139",
+    "template_name": "Unmanaged Laptop Plugged into Core Server Switchport",
+    "domain": "business_contexts",
+    "task": "investigation_planning",
+    "classification": "insufficient_evidence",
+    "split": "train",
+    "borderline_category": "suspicious_vs_insufficient_evidence",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-140",
+    "template_name": "Customer Support Desktop Downloading Remote Support Utility",
+    "domain": "business_contexts",
+    "task": "investigation_planning",
+    "classification": "insufficient_evidence",
+    "split": "train",
+    "borderline_category": "suspicious_vs_insufficient_evidence",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-141",
+    "template_name": "Hash Matches Known Ransomware on Threat Intelligence Feed",
+    "domain": "threat_intel_scenarios",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "test",
+    "borderline_category": null,
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-142",
+    "template_name": "Conflicting AV Flag: Clean Threat Intel but Behavioral Malice",
+    "domain": "threat_intel_scenarios",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-143",
+    "template_name": "Signed Microsoft Binary Executing Malicious Payload via LOLBin",
+    "domain": "threat_intel_scenarios",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "train",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-144",
+    "template_name": "External IP on Threat Feed with No Internal Host Execution",
+    "domain": "threat_intel_scenarios",
+    "task": "alert_triage",
+    "classification": "suspicious",
+    "split": "val",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-145",
+    "template_name": "Unknown Hash on Internal Test Server with Ambiguous Metadata",
+    "domain": "threat_intel_scenarios",
+    "task": "investigation_planning",
+    "classification": "insufficient_evidence",
+    "split": "train",
+    "borderline_category": "suspicious_vs_insufficient_evidence",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-146",
+    "template_name": "Threat Intel Domain Match with DNS Sinkhole Response",
+    "domain": "threat_intel_scenarios",
+    "task": "alert_triage",
+    "classification": "insufficient_evidence",
+    "split": "val",
+    "borderline_category": "suspicious_vs_insufficient_evidence",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-147",
+    "template_name": "Benign File False Positive Flagged by Heuristic Antivirus",
+    "domain": "threat_intel_scenarios",
+    "task": "evidence_analysis",
+    "classification": "benign",
+    "split": "train",
+    "borderline_category": "benign_vs_suspicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-148",
+    "template_name": "Conflicting Threat Intel: Known Malicious IP with Internal Service Activity",
+    "domain": "threat_intel_scenarios",
+    "task": "investigation_planning",
+    "classification": "insufficient_evidence",
+    "split": "train",
+    "borderline_category": "suspicious_vs_insufficient_evidence",
+    "os_family": "Linux"
+  },
+  {
+    "template_id": "TF-149",
+    "template_name": "Employee Reporting Phishing Email via Outlook Addin",
+    "domain": "threat_intel_scenarios",
+    "task": "alert_triage",
+    "classification": "likely_malicious",
+    "split": "test",
+    "borderline_category": "suspicious_vs_likely_malicious",
+    "os_family": "Windows"
+  },
+  {
+    "template_id": "TF-150",
+    "template_name": "Removable USB Drive Inserting AutoRun Script",
+    "domain": "threat_intel_scenarios",
+    "task": "alert_triage",
+    "classification": "confirmed_malicious",
+    "split": "train",
+    "borderline_category": null,
+    "os_family": "Windows"
+  }
+]

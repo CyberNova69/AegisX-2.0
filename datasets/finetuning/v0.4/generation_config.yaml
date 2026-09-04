@@ -1,0 +1,37 @@
+# AegisX Fine-Tuning Dataset Generation Configuration v0.4
+dataset:
+  name: "aegisx-soc-finetuning"
+  version: "0.4"
+  description: "Research-ready synthetic SOC triage fine-tuning dataset with template-stratified split and anti-keyword design"
+
+generation:
+  seed: 42
+  target_total_records: 3000
+  total_template_families: 150
+  records_per_template: 20
+  domains: 18
+  stratified_split:
+    train_ratio: 0.80
+    validation_ratio: 0.10
+    test_ratio: 0.10
+  actual_split_records:
+    train: 2400
+    validation: 300
+    test: 300
+
+classification_target_distribution:
+  benign: 0.20
+  suspicious: 0.20
+  likely_malicious: 0.20
+  confirmed_malicious: 0.20
+  insufficient_evidence: 0.20
+
+os_distribution:
+  windows_templates: 105
+  linux_templates: 45
+  windows_records: 2100
+  linux_records: 900
+
+quality:
+  enforce_strict_grounding: true
+  min_acceptable_quality_score: 80

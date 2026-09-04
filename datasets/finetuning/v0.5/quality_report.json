@@ -1,0 +1,12 @@
+{
+  "dataset_version": "0.5",
+  "generated_at": "2026-09-04T12:00:00+00:00",
+  "total_records": 3000,
+  "quality_score_mean": 100.0,
+  "quality_score_min": 100,
+  "quality_score_max": 100,
+  "distribution": {
+    "100": 3000
+  },
+  "grounding_rate": 1.0
+}

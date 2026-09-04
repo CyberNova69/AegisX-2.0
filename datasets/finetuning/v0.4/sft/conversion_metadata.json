@@ -1,0 +1,40 @@
+{
+  "conversion_version": "0.1.0",
+  "schema_version": "sft-chat-v1",
+  "converted_at": "2026-09-03T08:36:28.738958+00:00",
+  "source_directory": "C:\\Users\\makwa\\AegisX\\datasets\\finetuning\\v0.4",
+  "output_directory": "C:\\Users\\makwa\\AegisX\\datasets\\finetuning\\v0.4\\sft",
+  "test_set_excluded": true,
+  "system_prompt_length": 2095,
+  "splits": {
+    "train": {
+      "split": "train",
+      "source_file": "train.jsonl",
+      "output_file": "train.jsonl",
+      "source_count": 2400,
+      "converted_count": 2400,
+      "rejected_count": 0,
+      "rejected_records": [],
+      "output_sha256": "e4f1520eec59e66de94f185496b29dd9e8b35445641f6d7f327a893c0cfba72f"
+    },
+    "validation": {
+      "split": "validation",
+      "source_file": "validation.jsonl",
+      "output_file": "validation.jsonl",
+      "source_count": 300,
+      "converted_count": 300,
+      "rejected_count": 0,
+      "rejected_records": [],
+      "output_sha256": "38d71bf89b9abe5cf63c9a5b92258cf6e48da0056b57ba1af4600bde6550993c"
+    }
+  },
+  "source_file_hashes": {
+    "train_source_sha256": "ec4b9016377e7186cd3dde4c7c64174d7093b30cd044d26be836a502bb2a60ab",
+    "validation_source_sha256": "f6bd48ea8672b673369a224e2bce58d7ed3c52444bc1c40d7a8552b64426a097"
+  },
+  "totals": {
+    "source_records": 2700,
+    "converted_records": 2700,
+    "rejected_records": 0
+  }
+}

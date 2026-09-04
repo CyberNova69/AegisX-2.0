@@ -1,0 +1,51 @@
+{
+  "dataset_version": "0.3",
+  "generated_at": "2026-09-03T07:11:54.353336+00:00",
+  "random_seed": 42,
+  "total_records": 520,
+  "total_templates": 85,
+  "splits": {
+    "train": {
+      "records": 416,
+      "templates": 68,
+      "file_hash_sha256": "194e4fac41736c8d79bc48a3d02cff62f26968142b00fbfc345312744d53d7d9",
+      "classifications": {
+        "suspicious": 86,
+        "likely_malicious": 85,
+        "insufficient_evidence": 79,
+        "benign": 81,
+        "confirmed_malicious": 85
+      }
+    },
+    "validation": {
+      "records": 54,
+      "templates": 9,
+      "file_hash_sha256": "3903ee432e2934f3f98906678a5df29209b26dd3b52d603ac09a665d06a0c22b",
+      "classifications": {
+        "suspicious": 12,
+        "confirmed_malicious": 12,
+        "insufficient_evidence": 6,
+        "likely_malicious": 12,
+        "benign": 12
+      }
+    },
+    "test": {
+      "records": 50,
+      "templates": 8,
+      "file_hash_sha256": "d6067a070a0e93183f7a65b0592bbebf218d2001ca65c9f330903ac32f50be27",
+      "classifications": {
+        "benign": 12,
+        "insufficient_evidence": 18,
+        "suspicious": 7,
+        "likely_malicious": 6,
+        "confirmed_malicious": 7
+      }
+    }
+  },
+  "leakage_checks": {
+    "train_val_overlap_count": 0,
+    "train_test_overlap_count": 0,
+    "val_test_overlap_count": 0,
+    "zero_leakage_verified": true
+  }
+}
