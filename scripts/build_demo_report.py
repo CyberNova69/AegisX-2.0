@@ -89,8 +89,47 @@ def render_scenario(r):
     else:
         findings_html = '<li><span class="muted">No investigation findings.</span></li>'
 
+    ti = r.get("threat_intel")
+    ti_html = ""
+    if ti:
+        rep_html = ""
+        for ind in ti.get("indicators_analyzed", []):
+            rep = str(ind.get("reputation", "unknown"))
+            color = {"malicious": "#A32D2D", "suspicious": "#854F0B",
+                     "benign": "#3B6D11"}.get(rep, "#5F5E5A")
+            rep_html += (
+                f'<div class="kv"><span class="mono">{escape(str(ind.get("indicator")))}</span>'
+                f'<b style="color:{color}">{escape(rep)}</b></div>'
+            )
+            detail = f'{ind.get("threat_actor", "Unknown")} · {ind.get("malware_family", "None")}'
+            rep_html += (f'<div class="kv"><span class="muted small">actor / malware</span>'
+                         f'<span class="muted small">{escape(str(detail))}</span></div>')
+
+        mitre_html = ""
+        for t in ti.get("mitre_techniques", []):
+            mitre_html += (
+                f'<span class="tcode">{escape(str(t.get("technique_id")))}</span> '
+                f'{escape(str(t.get("technique_name")))} '
+                f'<span class="muted">[{escape(str(t.get("tactic")))}]</span><br>'
+            )
+        if not mitre_html:
+            mitre_html = '<span class="muted">No technique resolved.</span>'
+
+        ti_html = f"""
+          <div class="ti">
+            <div class="ti-col">
+              <div class="label">Indicator reputation</div>
+              {rep_html or '<span class="muted small">No indicators analysed.</span>'}
+            </div>
+            <div class="ti-col">
+              <div class="label">MITRE ATT&amp;CK</div>
+              <div class="small">{mitre_html}</div>
+            </div>
+          </div>
+        """
+
     actions_html = ""
-    src_actions = (inv or triage).get("recommended_actions", []) or []
+    src_actions = (inv or ti or triage).get("recommended_actions", []) or []
     for a in src_actions:
         actions_html += (
             f'<li><span class="prio">{escape(str(a.get("priority", "medium")).upper())}</span> '
@@ -135,6 +174,7 @@ def render_scenario(r):
           <ul class="tight">{actions_html}</ul>
         </div>
       </div>
+      {ti_html}
     </section>
     """
 
@@ -148,6 +188,9 @@ def main():
     investigated = sum(1 for r in data if r["investigation"])
     step_count = sum(len(r["investigation"]["investigation_steps"])
                      for r in data if r["investigation"])
+    ti_count = sum(1 for r in data if r.get("threat_intel"))
+    mitre_count = sum(len(r["threat_intel"].get("mitre_techniques", []))
+                      for r in data if r.get("threat_intel"))
     matches = 0
     for r in data:
         got = r["investigation"]["conclusion"] if r["investigation"] else r["triage"]["classification"]
@@ -168,7 +211,7 @@ def main():
   .wrap {{ max-width:1080px; margin:0 auto; }}
   h1 {{ font-size:22px; font-weight:500; margin:0 0 4px; }}
   .sub {{ color:var(--muted); margin:0 0 24px; font-size:13px; }}
-  .stats {{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:24px; }}
+  .stats {{ display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-bottom:24px; }}
   .stat {{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }}
   .stat .n {{ font-size:22px; font-weight:500; }}
   .stat .l {{ color:var(--muted); font-size:12px; }}
@@ -198,6 +241,10 @@ def main():
   ul.tight li {{ margin-bottom:6px; }}
   .prio {{ font-size:10px; font-weight:500; border:1px solid var(--line);
     border-radius:4px; padding:1px 5px; color:var(--muted); }}
+  .ti {{ display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:16px;
+    padding-top:14px; border-top:1px solid var(--line); }}
+  .tcode {{ font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12px;
+    background:#EEEDFE; color:#26215C; border-radius:4px; padding:1px 5px; }}
   .muted {{ color:var(--muted); }}
   .small {{ font-size:12px; }}
   .mono {{ font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }}
@@ -214,6 +261,7 @@ def main():
     <div class="stat"><div class="n">{total}</div><div class="l">scenarios run</div></div>
     <div class="stat"><div class="n">{matches}/{total}</div><div class="l">verdicts matched</div></div>
     <div class="stat"><div class="n">{investigated}</div><div class="l">investigated</div></div>
+    <div class="stat"><div class="n">{mitre_count}</div><div class="l">MITRE mappings</div></div>
     <div class="stat"><div class="n">{step_count}</div><div class="l">tool invocations</div></div>
   </div>
 
@@ -221,6 +269,7 @@ def main():
     <b>Security alert</b> → <b>TriageAgent</b> (classification · severity · confidence) →
     <b>decision branch</b> (investigate only if not confidently benign) →
     <b>InvestigationAgent</b> (multi-turn read-only tool loop) →
+    <b>ThreatIntelAgent</b> (indicator reputation + MITRE ATT&amp;CK mapping) →
     <b>grounded report</b> (findings · evidence · recommended actions) →
     <b>human analyst</b> (reviews and approves)
   </div>
