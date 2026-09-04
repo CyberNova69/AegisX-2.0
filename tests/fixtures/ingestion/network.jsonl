@@ -1,0 +1,2 @@
+{"@timestamp": "2026-09-04T12:01:00Z", "src_ip": "10.0.0.5", "dest_ip": "8.8.8.8", "domain": "evil.example.com", "port": 443}
+{"@timestamp": "2026-09-04T12:02:00Z", "src_ip": "10.0.0.6", "dest_ip": "1.1.1.1", "domain": "update.example.org", "port": 53}

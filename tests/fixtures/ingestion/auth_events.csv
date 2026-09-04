@@ -1,0 +1,4 @@
+﻿timestamp,host,user,src_ip,action
+2026-09-04T12:00:00Z,FIN-W10-04,clerk_emily,192.168.1.50,login_success
+2026-09-04T12:01:00Z,FIN-W10-04,admin_john,10.0.0.9,login_failure
+2026-09-04T12:02:00Z,SRV-FILE-01,it_admin02,91.234.56.78,login_success

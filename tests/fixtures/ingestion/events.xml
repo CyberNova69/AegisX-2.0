@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Events>
+  <Event>
+    <Time>2026-09-04T12:02:00Z</Time>
+    <Host>WS-01</Host>
+    <User>bob</User>
+    <Action>file_create</Action>
+    <FilePath>C:\temp\a.exe</FilePath>
+  </Event>
+  <Event>
+    <Time>2026-09-04T12:03:00Z</Time>
+    <Host>WS-02</Host>
+    <User>alice</User>
+    <Action>registry_set</Action>
+    <FilePath>HKLM\Software\Evil</FilePath>
+  </Event>
+</Events>

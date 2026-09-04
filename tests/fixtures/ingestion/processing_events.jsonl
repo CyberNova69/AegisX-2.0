@@ -1,0 +1,5 @@
+{"timestamp":"2026-09-04 12:00:00","host":" WS-01 ","user":" alice ","src_ip":"10.0.0.5","action":"login_failure","severity":"WARN"}
+{"timestamp":"2026-09-04 12:00:00","host":"ws-01","user":"alice","src_ip":"10.0.0.5","action":"login_failure","severity":"warning"}
+{"timestamp":"not-a-date","host":"WS-02","user":"bob","src_ip":"10.0.0.8","action":"login_success","severity":"low"}
+{"timestamp":"2026-09-04T12:05:00Z","host":"WS-03","user":"carol","src_ip":"10.0.0.9","action":"file_create","port":"99999","severity":"high"}
+{"_parse_error":"fixture malformed source record","_raw_line":"{bad json"}

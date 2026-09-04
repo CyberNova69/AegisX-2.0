@@ -1,0 +1,16 @@
+[
+  {
+    "eventTime": "2026-09-04T12:00:00Z",
+    "Computer": "SRV-FILE-01",
+    "Account": "it_admin02",
+    "SourceIp": "91.234.56.78",
+    "CommandLine": "powershell -enc JABjAD0..."
+  },
+  {
+    "eventTime": "2026-09-04T12:05:00Z",
+    "Computer": "WS-DEV-03",
+    "Account": "dev_karen",
+    "SourceIp": "172.16.0.20",
+    "Image": "C:\\Windows\\System32\\rundll32.exe"
+  }
+]
