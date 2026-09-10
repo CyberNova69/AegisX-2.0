@@ -1,7 +1,7 @@
 {
   "conversion_version": "0.1.0",
   "schema_version": "sft-chat-v1",
-  "converted_at": "2026-09-03T08:36:28.738958+00:00",
+  "converted_at": "2026-09-08T09:02:27.666936+00:00",
   "source_directory": "C:\\Users\\makwa\\AegisX\\datasets\\finetuning\\v0.4",
   "output_directory": "C:\\Users\\makwa\\AegisX\\datasets\\finetuning\\v0.4\\sft",
   "test_set_excluded": true,

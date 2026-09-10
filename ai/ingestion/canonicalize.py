@@ -61,11 +61,14 @@ _FIELD_MAP: Dict[str, str] = {
     "hash": "file_hash", "sha256": "file_hash", "sha1": "file_hash",
     "md5": "file_hash", "filehash": "file_hash", "file_hash": "file_hash",
     "hashvalue": "file_hash", "imphash": "file_hash",
-    # port / severity
+    # network / port / severity / status
     "port": "port", "srcport": "port", "sourceport": "port",
-    "dstport": "dest_port", "destinationport": "dest_port",
+    "dstport": "dest_port", "destinationport": "dest_port", "dest_port": "dest_port",
+    "protocol": "protocol", "proto": "protocol", "transport": "protocol",
     "severity": "severity", "level": "severity", "loglevel": "severity",
-    "eventlevel": "severity", "priority": "severity", "status": "severity",
+    "eventlevel": "severity", "priority": "severity",
+    "status": "status", "result": "status", "outcome": "status",
+    "success": "status", "issuccess": "status",
     # event type hint
     "eventtype": "_event_type", "event_type": "_event_type",
     "action": "_event_type", "operation": "_event_type",
@@ -161,6 +164,22 @@ def map_record(raw: Dict[str, Any], source_name: str, record_index: int,
     severity_raw = mapped.get("severity")
     source_ip_raw = mapped.get("source_ip")
     dest_ip_raw = mapped.get("dest_ip")
+    source_ip = normalize_ip(source_ip_raw)
+    dest_ip = normalize_ip(dest_ip_raw)
+    # Preserve explicitly mapped but invalid typed values for Task 2 validation.
+    # They must not quietly disappear during Task 1 field mapping.
+    if source_ip_raw not in (None, "") and source_ip is None:
+        attrs["_invalid_source_ip"] = source_ip_raw
+    if dest_ip_raw not in (None, "") and dest_ip is None:
+        attrs["_invalid_dest_ip"] = dest_ip_raw
+    raw_port = mapped.get("port")
+    raw_dest_port = mapped.get("dest_port")
+    port = _to_int(raw_port)
+    dest_port = _to_int(raw_dest_port)
+    if raw_port not in (None, "") and port is None:
+        attrs["_invalid_port"] = raw_port
+    if raw_dest_port not in (None, "") and dest_port is None:
+        attrs["_invalid_dest_port"] = raw_dest_port
 
     event = CanonicalEvent(
         event_id=event_id,
@@ -171,15 +190,18 @@ def map_record(raw: Dict[str, Any], source_name: str, record_index: int,
         event_type=infer_event_type(mapped),
         hostname=_coerce_str(mapped.get("hostname")),
         username=_coerce_str(mapped.get("username")),
-        source_ip=normalize_ip(source_ip_raw),
-        dest_ip=normalize_ip(dest_ip_raw),
+        source_ip=source_ip,
+        dest_ip=dest_ip,
         domain=_coerce_str(mapped.get("domain")),
         process_name=_coerce_str(mapped.get("process_name")),
         command_line=_coerce_str(mapped.get("command_line")),
         file_path=_coerce_str(mapped.get("file_path")),
         file_hash=_coerce_str(mapped.get("file_hash")),
-        port=_to_int(mapped.get("port")),
+        port=port,
+        dest_port=dest_port,
+        protocol=_coerce_str(mapped.get("protocol")),
         severity=normalize_severity(severity_raw),
+        status=mapped.get("status"),
         raw=raw,
         attributes=attrs,
     )

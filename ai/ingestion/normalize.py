@@ -6,6 +6,8 @@ Pure stdlib. Deterministic. No network, no locale-dependent parsing.
 from __future__ import annotations
 
 import datetime as _dt
+import ipaddress
+import re
 from typing import Optional
 
 
@@ -97,17 +99,76 @@ def normalize_severity(value: object) -> Optional[str]:
 
 
 def normalize_ip(value: object) -> Optional[str]:
-    """Return the value if it looks like an IPv4 address, else None."""
+    """Canonicalize a valid IPv4 or IPv6 address; return None if invalid.
+
+    `ipaddress` is standard library. It handles compressed/expanded IPv6 forms
+    deterministically and never performs a DNS/network lookup.
+    """
     if not isinstance(value, str):
         return None
     s = value.strip()
-    parts = s.split(".")
-    if len(parts) != 4:
+    if not s:
         return None
     try:
-        return s if all(0 <= int(p) <= 255 for p in parts) else None
+        return str(ipaddress.ip_address(s))
     except ValueError:
         return None
+
+
+def is_valid_ip(value: object) -> bool:
+    """True only for a populated, syntactically valid IPv4 or IPv6 address."""
+    return normalize_ip(value) is not None
+
+
+def normalize_hash(value: object) -> Optional[str]:
+    """Canonicalize explicitly mapped hash values; preserve unrecognized values.
+
+    The caller knows the field represents a hash. Hexadecimal MD5/SHA-1/SHA-256
+    values are lowercased. Other values return their whitespace-normalized string
+    so validation can explicitly mark them invalid rather than silently removing
+    evidence from the event.
+    """
+    if value is None:
+        return None
+    cleaned = normalize_whitespace(str(value))
+    return cleaned.lower() or None
+
+
+def hash_algorithm(value: object) -> Optional[str]:
+    """Return md5/sha1/sha256 for a valid hex hash, otherwise None."""
+    if not isinstance(value, str) or not re.fullmatch(r"[0-9a-fA-F]+", value):
+        return None
+    return {32: "md5", 40: "sha1", 64: "sha256"}.get(len(value))
+
+
+def normalize_protocol(value: object) -> Optional[str]:
+    """Normalize known protocol spelling/case; keep unknown values for validation."""
+    if value is None:
+        return None
+    cleaned = normalize_whitespace(str(value)).lower()
+    return cleaned or None
+
+
+def normalize_status(value: object) -> Optional[object]:
+    """Safely normalize known boolean/status terms without coercing bare numbers.
+
+    Numeric 1/0 can mean a code, count, or boolean. This method therefore only
+    normalizes string values when the source field is semantically mapped as
+    status/action/result, and returns other values unchanged.
+    """
+    if value is None:
+        return None
+    if isinstance(value, bool):
+        return value
+    if not isinstance(value, str):
+        return value
+    cleaned = normalize_whitespace(value).lower()
+    mapping = {
+        "true": True, "false": False, "yes": True, "no": False,
+        "success": "success", "successful": "success", "succeeded": "success",
+        "failure": "failure", "failed": "failure", "fail": "failure",
+    }
+    return mapping.get(cleaned, cleaned or None)
 
 
 def normalize_whitespace(value: str) -> str:

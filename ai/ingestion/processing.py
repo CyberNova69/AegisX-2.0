@@ -15,8 +15,9 @@ from dataclasses import dataclass, field
 from typing import Dict, Iterable, Iterator, List, Optional
 
 from .normalize import (
-    normalize_domain, normalize_hostname, normalize_severity, normalize_timestamp,
-    normalize_whitespace,
+    hash_algorithm, is_valid_ip, normalize_domain, normalize_hash, normalize_hostname,
+    normalize_ip, normalize_protocol, normalize_severity, normalize_status,
+    normalize_timestamp, normalize_whitespace,
 )
 from .types import CanonicalEvent, EVENT_TYPES, SEVERITIES
 
@@ -55,10 +56,17 @@ class NormalizedEvent:
     duplicate_of: Optional[str] = None
 
     @property
+    def validation_status(self) -> str:
+        """Explicit validation state, independent of deduplication status."""
+        if any(issue.severity == "error" for issue in self.validation_issues):
+            return "INVALID"
+        if self.validation_issues:
+            return "VALID_WITH_WARNINGS"
+        return "VALID"
+
+    @property
     def trusted(self) -> bool:
-        return not self.duplicate_of and not any(
-            issue.severity == "error" for issue in self.validation_issues
-        )
+        return not self.duplicate_of and self.validation_status != "INVALID"
 
     @property
     def event_id(self) -> str:
@@ -71,6 +79,7 @@ class NormalizedEvent:
             "validation_issues": [i.to_dict() for i in self.validation_issues],
             "fingerprint": self.fingerprint,
             "duplicate_of": self.duplicate_of,
+            "validation_status": self.validation_status,
             "trusted": self.trusted,
         }
 
@@ -160,6 +169,9 @@ class EventNormalizer:
             ("hostname", normalize_hostname, "normalized hostname"),
             ("domain", normalize_domain, "normalized domain"),
             ("severity", normalize_severity, "normalized severity"),
+            ("file_hash", normalize_hash, "normalized hash"),
+            ("protocol", normalize_protocol, "normalized protocol"),
+            ("status", normalize_status, "normalized status"),
         ):
             before = getattr(event, name)
             if before is not None:
@@ -167,6 +179,14 @@ class EventNormalizer:
                 if after is not None and after != before:
                     setattr(event, name, after)
                     actions.append(f"{name}: {label}")
+
+        for name in ("source_ip", "dest_ip"):
+            before = getattr(event, name)
+            if before is not None:
+                after = normalize_ip(before)
+                if after is not None and after != before:
+                    setattr(event, name, after)
+                    actions.append(f"{name}: normalized IP")
 
         # Stable whitespace normalization in attributes only; preserve rich values
         # and nesting rather than coercing/flattening data late in the pipeline.
@@ -201,8 +221,28 @@ class EventValidator:
             issues.append(ValidationIssue(
                 "invalid_severity", f"unsupported severity '{event.severity}'", "severity"
             ))
-        if event.port is not None and not (0 <= event.port <= 65535):
-            issues.append(ValidationIssue("invalid_port", "port must be 0..65535", "port"))
+        for field in ("source_ip", "dest_ip"):
+            value = getattr(event, field)
+            if value is not None and not is_valid_ip(value):
+                issues.append(ValidationIssue("invalid_ip", f"{field} is not a valid IPv4 or IPv6 address", field))
+        for field in ("_invalid_source_ip", "_invalid_dest_ip"):
+            if field in event.attributes:
+                issues.append(ValidationIssue("invalid_ip", f"source supplied invalid value '{event.attributes[field]}'", field))
+        for field in ("port", "dest_port"):
+            value = getattr(event, field)
+            if value is not None and not (0 <= value <= 65535):
+                issues.append(ValidationIssue("invalid_port", f"{field} must be 0..65535", field))
+            invalid_key = f"_invalid_{field}"
+            if invalid_key in event.attributes:
+                issues.append(ValidationIssue("invalid_port", f"source supplied non-numeric {field} '{event.attributes[invalid_key]}'", field))
+        if event.file_hash is not None and hash_algorithm(event.file_hash) is None:
+            issues.append(ValidationIssue(
+                "invalid_hash", "file_hash must be hexadecimal MD5, SHA-1, or SHA-256", "file_hash"
+            ))
+        if event.protocol is not None and event.protocol not in ("tcp", "udp", "icmp", "icmpv6", "sctp", "http", "https", "dns", "tls"):
+            issues.append(ValidationIssue(
+                "unknown_protocol", f"protocol '{event.protocol}' is not in the controlled vocabulary", "protocol", "warning"
+            ))
         if event.raw.get("_parse_error"):
             issues.append(ValidationIssue(
                 "source_parse_error", str(event.raw["_parse_error"]), "raw", "error"

@@ -73,7 +73,10 @@ class CanonicalEvent:
     file_path: Optional[str] = None
     file_hash: Optional[str] = None
     port: Optional[int] = None
+    dest_port: Optional[int] = None
+    protocol: Optional[str] = None
     severity: Optional[str] = None
+    status: Optional[object] = None
 
     raw: Dict[str, Any] = field(default_factory=dict)
     attributes: Dict[str, Any] = field(default_factory=dict)
@@ -96,7 +99,10 @@ class CanonicalEvent:
             "file_path": self.file_path,
             "file_hash": self.file_hash,
             "port": self.port,
+            "dest_port": self.dest_port,
+            "protocol": self.protocol,
             "severity": self.severity,
+            "status": self.status,
             "attributes": self.attributes,
             "raw": self.raw,
         }
