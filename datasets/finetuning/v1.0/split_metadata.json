@@ -1,0 +1,126 @@
+{
+  "dataset_version": "1.0",
+  "integration_date": "2026-09-12",
+  "verified_date": "2026-09-14",
+  "description": "Real-telemetry SFT chat-format dataset with Sysmon/Windows security events. 93.8% real, 6.2% synthetic.",
+  "format": "sft-chat-v1",
+  "is_synthetic": false,
+  "total_records": 120358,
+  "splits": {
+    "train": {
+      "records": 96086,
+      "file_size_bytes": 164310114,
+      "file_hash_sha256": "40877f2748d889f8009698b4a00bf75343da758588467b6b99c95b9dde902d21",
+      "synthetic_count": 5888,
+      "real_count": 90198,
+      "synthetic_ratio": 0.061
+    },
+    "validation": {
+      "records": 12156,
+      "file_size_bytes": 20839636,
+      "file_hash_sha256": "1fa6d39d8b55fde359767c9f6f728dd7b3da2121056d177f0391f89b0f13b5e6",
+      "synthetic_count": 744,
+      "real_count": 11412,
+      "synthetic_ratio": 0.061
+    },
+    "test": {
+      "records": 12116,
+      "file_size_bytes": 20720000,
+      "file_hash_sha256": "a625f709cc30db835baf34918f66193b9bf6dffe786b0d4085174c2fcd3a3145",
+      "synthetic_count": 781,
+      "real_count": 11335,
+      "synthetic_ratio": 0.064
+    }
+  },
+  "schema": {
+    "record_keys": ["messages", "metadata"],
+    "messages_count": 3,
+    "roles": ["system", "user", "assistant"],
+    "metadata_keys": [
+      "canonical_hash", "difficulty", "family", "group_id",
+      "is_synthetic", "mitre_techniques", "source", "split",
+      "task", "telemetry_hash", "ua_hash"
+    ]
+  },
+  "task_distribution": {
+    "general_soc_reasoning": 50484,
+    "event_normalization": 50000,
+    "sigma_analysis": 5751,
+    "elastic_analysis": 4080,
+    "cti_qa": 2862,
+    "splunk_analysis": 2168,
+    "false_positive_analysis": 2392,
+    "alert_classification": 2509,
+    "threat_hunting": 496,
+    "report_summarization": 216
+  },
+  "family_distribution": {
+    "event": 50000,
+    "alert": 35632,
+    "cti": 12186,
+    "synthetic": 7413,
+    "sigma": 6287,
+    "elastic": 4080,
+    "false": 2592,
+    "splunk": 2168
+  },
+  "leakage_checks": {
+    "canonical_hash_overlap": {
+      "train_validation": 0,
+      "train_test": 0,
+      "validation_test": 0
+    },
+    "telemetry_hash_overlap": {
+      "train_validation": 0,
+      "train_test": 0,
+      "validation_test": 0
+    },
+    "ua_hash_overlap": {
+      "train_validation": 0,
+      "train_test": 0,
+      "validation_test": 0
+    },
+    "full_record_overlap": {
+      "train_validation": 0,
+      "train_test": 0,
+      "validation_test": 0
+    },
+    "content_overlap": {
+      "train_validation": 0,
+      "train_test": 0,
+      "validation_test": 0
+    },
+    "group_id_overlap": {
+      "train_validation": 0,
+      "train_test": 0,
+      "validation_test": 0
+    },
+    "zero_leakage_verified": true
+  },
+  "intra_split_duplicates": {
+    "train": {
+      "exact_duplicates": 0,
+      "canonical_duplicates": 0,
+      "telemetry_duplicates": 6893,
+      "unique_group_ids": 89193
+    },
+    "validation": {
+      "exact_duplicates": 0,
+      "canonical_duplicates": 0,
+      "telemetry_duplicates": 1007,
+      "unique_group_ids": 11149
+    },
+    "test": {
+      "exact_duplicates": 0,
+      "canonical_duplicates": 0,
+      "telemetry_duplicates": 966,
+      "unique_group_ids": 11150
+    }
+  },
+  "compatibility": {
+    "sft_conversion_required": false,
+    "consumed_by_train_lora": true,
+    "consumed_by_evaluate_model": true,
+    "test_firewall_preserved": true
+  }
+}
