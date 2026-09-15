@@ -1,0 +1,13 @@
+# CTU-13 Label Mapping
+# Source: Czech Technical University Botnet Dataset
+
+labels:
+  "Normal":
+    classification: "benign"
+    attack_category: "none"
+  "Botnet":
+    classification: "malicious"
+    attack_category: "botnet"
+  "Background":
+    classification: "benign"
+    attack_category: "none"

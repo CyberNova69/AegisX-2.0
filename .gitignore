@@ -60,3 +60,14 @@ reports/
 # Logs
 *.log
 logs/
+
+# SFT benchmark data (repeated v0.4 synthetic, multi-GB)
+sft_benchmark/
+temp_sft_benchmark/
+
+# v1.0 dataset JSONL files (too large for Git — transfer via USB/cloud)
+datasets/finetuning/v1.0/*.jsonl
+
+# Console output logs
+output*.txt
+timing.txt

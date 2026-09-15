@@ -1,0 +1,23 @@
+# AegisX SOC Dataset Label Mapping
+# Source: AegisX internal SOC triage dataset (v0.4 format)
+#
+# These are trusted labels from the existing AegisX cybersecurity dataset.
+# The SOC adapter sets record.source = "aegisx_soc" and
+# record.source_label = the original output.classification string.
+
+labels:
+  "benign":
+    classification: "benign"
+    attack_category: "none"
+  "suspicious":
+    classification: "suspicious"
+    attack_category: "other"
+  "likely_malicious":
+    classification: "likely_malicious"
+    attack_category: "other"
+  "confirmed_malicious":
+    classification: "confirmed_malicious"
+    attack_category: "other"
+  "insufficient_evidence":
+    classification: "insufficient_evidence"
+    attack_category: "other"

@@ -1,0 +1,52 @@
+# CICIDS-2017/2018 Label Mapping
+# Source: Canadian Institute for Cybersecurity IDS Dataset
+
+labels:
+  "BENIGN":
+    classification: "benign"
+    attack_category: "none"
+  "Benign":
+    classification: "benign"
+    attack_category: "none"
+  "DDoS":
+    classification: "malicious"
+    attack_category: "ddos"
+  "DoS Hulk":
+    classification: "malicious"
+    attack_category: "dos"
+  "DoS GoldenEye":
+    classification: "malicious"
+    attack_category: "dos"
+  "DoS slowloris":
+    classification: "malicious"
+    attack_category: "dos"
+  "DoS Slowhttptest":
+    classification: "malicious"
+    attack_category: "dos"
+  "FTP-Patator":
+    classification: "malicious"
+    attack_category: "brute_force"
+  "SSH-Patator":
+    classification: "malicious"
+    attack_category: "brute_force"
+  "Web Attack – Brute Force":
+    classification: "malicious"
+    attack_category: "web_attack"
+  "Web Attack – XSS":
+    classification: "malicious"
+    attack_category: "web_attack"
+  "Web Attack – Sql Injection":
+    classification: "malicious"
+    attack_category: "web_attack"
+  "Infiltration":
+    classification: "malicious"
+    attack_category: "infiltration"
+  "Bot":
+    classification: "malicious"
+    attack_category: "botnet"
+  "PortScan":
+    classification: "suspicious"
+    attack_category: "port_scan"
+  "Heartbleed":
+    classification: "malicious"
+    attack_category: "exploit"

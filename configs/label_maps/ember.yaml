@@ -1,0 +1,25 @@
+# EMBER Label Mapping
+# Source: Endgame Malware BEnchmark for Research
+
+labels:
+  "0":
+    classification: "benign"
+    attack_category: "none"
+  "benign":
+    classification: "benign"
+    attack_category: "none"
+  "1":
+    classification: "malicious"
+    attack_category: "malware"
+  "malware":
+    classification: "malicious"
+    attack_category: "malware"
+  "malicious":
+    classification: "malicious"
+    attack_category: "malware"
+  "-1":
+    classification: "insufficient_evidence"
+    attack_category: "other"
+  "unknown":
+    classification: "insufficient_evidence"
+    attack_category: "other"

@@ -1,0 +1,37 @@
+# UNSW-NB15 Label Mapping
+# Source: University of New South Wales Network Intrusion Dataset
+
+labels:
+  "Normal":
+    classification: "benign"
+    attack_category: "none"
+  "Fuzzers":
+    classification: "suspicious"
+    attack_category: "fuzzers"
+  "Analysis":
+    classification: "suspicious"
+    attack_category: "analysis"
+  "Backdoor":
+    classification: "malicious"
+    attack_category: "backdoor"
+  "Backdoors":
+    classification: "malicious"
+    attack_category: "backdoor"
+  "DoS":
+    classification: "malicious"
+    attack_category: "dos"
+  "Exploits":
+    classification: "malicious"
+    attack_category: "exploit"
+  "Generic":
+    classification: "malicious"
+    attack_category: "generic_attack"
+  "Reconnaissance":
+    classification: "suspicious"
+    attack_category: "reconnaissance"
+  "Shellcode":
+    classification: "malicious"
+    attack_category: "shellcode"
+  "Worms":
+    classification: "malicious"
+    attack_category: "worm"
