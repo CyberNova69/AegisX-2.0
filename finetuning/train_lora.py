@@ -446,6 +446,8 @@ def train(config: Dict[str, Any], project_root: Path, resume_from: Optional[str]
         per_device_train_batch_size=train_cfg.get("batch_size", 4),
         per_device_eval_batch_size=train_cfg.get("batch_size", 4),
         gradient_accumulation_steps=train_cfg.get("gradient_accumulation_steps", 4),
+        gradient_checkpointing=train_cfg.get("gradient_checkpointing", False),
+        gradient_checkpointing_kwargs={"use_reentrant": False} if train_cfg.get("gradient_checkpointing", False) else None,
         learning_rate=train_cfg.get("learning_rate", 2e-4),
         warmup_ratio=train_cfg.get("warmup_ratio", 0.05),
         weight_decay=train_cfg.get("weight_decay", 0.01),

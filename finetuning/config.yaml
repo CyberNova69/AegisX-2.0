@@ -37,6 +37,7 @@ training:
   fp16: false
   bf16: true                        # Ampere+ GPUs; set false for older GPUs
   max_grad_norm: 1.0
+  gradient_checkpointing: true        # Reduces VRAM at cost of ~20% slower training
   optim: "paged_adamw_8bit"
 
 lora:
@@ -52,11 +53,15 @@ lora:
   task_type: "CAUSAL_LM"
 
 dataset:
-  train: "datasets/finetuning/v0.4/sft/train.jsonl"
-  validation: "datasets/finetuning/v0.4/sft/validation.jsonl"
-  test: "datasets/finetuning/v0.4/test.jsonl"          # Read-only, post-training eval
-  source_train: "datasets/finetuning/v0.4/train.jsonl"
-  source_validation: "datasets/finetuning/v0.4/validation.jsonl"
+  # v1.0: 120,358 records (96K train, 12K val, 12K test)
+  # Real-telemetry SFT chat format — no prepare_sft_dataset conversion needed
+  train: "datasets/finetuning/v1.0/train.jsonl"
+  validation: "datasets/finetuning/v1.0/validation.jsonl"
+  test: "datasets/finetuning/v1.0/test.jsonl"            # Read-only, post-training eval
+  # Previous v0.4 dataset (preserved, not deleted):
+  #   train: "datasets/finetuning/v0.4/sft/train.jsonl"
+  #   validation: "datasets/finetuning/v0.4/sft/validation.jsonl"
+  #   test: "datasets/finetuning/v0.4/test.jsonl"
 
 output:
   directory: "models/aegisx-triage"

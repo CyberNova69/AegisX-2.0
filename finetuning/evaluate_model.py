@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-AegisX Model Evaluation Script (v0.1)
+AegisX Model Evaluation Script (v0.2)
 =======================================
 
 Post-training evaluation comparing baseline vs. fine-tuned model performance
-on the held-out v0.4 test.jsonl set.
+on the held-out test set.
+
+Supports two record formats:
+  - v0.4 raw: {"task": ..., "input": {...}, "output": {...}}
+  - v1.0 SFT: {"messages": [{...}, {...}, {...}], "metadata": {...}}
 
 Metrics:
   - Classification accuracy, per-class precision/recall/F1
@@ -147,6 +151,48 @@ def load_test_set(test_path: Path) -> List[Dict[str, Any]]:
     return records
 
 
+def detect_format(records: List[Dict[str, Any]]) -> str:
+    """Detect whether test records are v0.4 raw or v1.0 SFT format."""
+    if not records:
+        return "unknown"
+    sample = records[0]
+    if "messages" in sample and "metadata" in sample:
+        return "v1.0_sft"
+    if "input" in sample and "output" in sample:
+        return "v0.4_raw"
+    return "unknown"
+
+
+def extract_ground_truth_text(record: Dict[str, Any], fmt: str) -> str:
+    """Extract the ground-truth assistant response as text."""
+    if fmt == "v1.0_sft":
+        return record["messages"][2]["content"]
+    else:
+        # v0.4: serialize the output block
+        return json.dumps(record["output"], indent=2)
+
+
+def extract_ground_truth_structured(record: Dict[str, Any], fmt: str) -> Optional[Dict[str, Any]]:
+    """
+    Extract a structured ground-truth dict if possible.
+    Returns None if the ground truth is not structured JSON.
+    """
+    if fmt == "v0.4_raw":
+        return record["output"]
+    # v1.0: try to parse the assistant content as JSON
+    text = record["messages"][2]["content"]
+    try:
+        return json.loads(text)
+    except (json.JSONDecodeError, ValueError):
+        # Try extracting embedded JSON object
+        try:
+            start = text.index("{")
+            end = text.rindex("}") + 1
+            return json.loads(text[start:end])
+        except (ValueError, json.JSONDecodeError):
+            return None
+
+
 # ---------------------------------------------------------------------------
 # Model inference (requires GPU + model)
 # ---------------------------------------------------------------------------
@@ -157,22 +203,33 @@ def run_inference_batch(
     tokenizer,
     system_prompt: str,
     max_new_tokens: int = 1024,
+    record_format: str = "v0.4_raw",
 ) -> List[Dict[str, Any]]:
     """
     Run inference on test records using a loaded model + tokenizer.
-    Returns list of parsed model outputs (or error markers).
+    Returns list of dicts with '_response_text' and optionally parsed JSON.
+
+    Supports both v0.4 raw format and v1.0 SFT chat format.
     """
     import torch
     
     results = []
     for i, record in enumerate(records):
-        input_data = record["input"]
-        user_prompt = format_triage_user_prompt(input_data)
-        
-        messages = [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ]
+        # Build prompt based on record format
+        if record_format == "v1.0_sft":
+            # v1.0: system + user already in messages; use them directly
+            messages = [
+                {"role": "system", "content": record["messages"][0]["content"]},
+                {"role": "user", "content": record["messages"][1]["content"]},
+            ]
+        else:
+            # v0.4: build from structured input
+            input_data = record["input"]
+            user_prompt = format_triage_user_prompt(input_data)
+            messages = [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ]
         
         prompt_text = tokenizer.apply_chat_template(
             messages,
@@ -195,18 +252,17 @@ def run_inference_batch(
         generated = output_ids[0][inputs["input_ids"].shape[-1]:]
         response_text = tokenizer.decode(generated, skip_special_tokens=True).strip()
         
-        # Parse JSON from response
+        # Parse JSON from response (best-effort)
+        parsed = {"_response_text": response_text}
         try:
-            # Try direct parse
-            parsed = json.loads(response_text)
+            parsed.update(json.loads(response_text))
         except json.JSONDecodeError:
-            # Try to extract JSON from markdown code block
             try:
                 start = response_text.index("{")
                 end = response_text.rindex("}") + 1
-                parsed = json.loads(response_text[start:end])
+                parsed.update(json.loads(response_text[start:end]))
             except (ValueError, json.JSONDecodeError):
-                parsed = {"_parse_error": True, "_raw": response_text}
+                parsed["_parse_error"] = True
         
         results.append(parsed)
         
@@ -224,10 +280,14 @@ def evaluate(
     predictions: List[Dict[str, Any]],
     records: List[Dict[str, Any]],
     label: str = "model",
+    record_format: str = "v0.4_raw",
 ) -> Dict[str, Any]:
     """
     Evaluate model predictions against ground-truth labels.
     Returns a structured evaluation report.
+
+    Supports both v0.4 raw format and v1.0 SFT chat format.
+    For v1.0, performs text-match and best-effort structured comparison.
     """
     pred_classifications = []
     true_classifications = []
@@ -239,76 +299,102 @@ def evaluate(
     valid_structure_count = 0
     valid_evidence_count = 0
     parse_error_count = 0
+    exact_text_match_count = 0
     total = len(records)
     
     for pred, record in zip(predictions, records):
-        gt = record["output"]
-        
         # Check for parse errors
         if pred.get("_parse_error"):
             parse_error_count += 1
             continue
         
-        # Structural validity
+        # --- Text-level comparison (works for both formats) ---
+        pred_text = pred.get("_response_text", "")
+        gt_text = extract_ground_truth_text(record, record_format)
+        if pred_text.strip() == gt_text.strip():
+            exact_text_match_count += 1
+        
+        # --- Structured comparison (best-effort for both formats) ---
+        gt = extract_ground_truth_structured(record, record_format)
+        
+        # Structural validity of prediction
         is_valid, _ = validate_structured_output(pred)
         if is_valid:
             valid_structure_count += 1
         
-        # Evidence reference validity
-        valid_ids = {
-            evt["id"]
-            for evt in record["input"].get("evidence", [])
-            if isinstance(evt, dict) and "id" in evt
-        }
-        ev_valid, _ = validate_evidence_refs(pred, valid_ids)
-        if ev_valid:
-            valid_evidence_count += 1
+        # Evidence reference validity (only for v0.4 which has input.evidence)
+        if record_format == "v0.4_raw":
+            valid_ids = {
+                evt["id"]
+                for evt in record["input"].get("evidence", [])
+                if isinstance(evt, dict) and "id" in evt
+            }
+            ev_valid, _ = validate_evidence_refs(pred, valid_ids)
+            if ev_valid:
+                valid_evidence_count += 1
         
-        # Collect labels
-        pred_cls = pred.get("classification", "UNKNOWN")
-        true_cls = gt.get("classification", "UNKNOWN")
-        pred_classifications.append(pred_cls)
-        true_classifications.append(true_cls)
-        
-        if pred.get("severity") and gt.get("severity"):
-            pred_severities.append(pred["severity"])
-            # Ground truth severity may come from findings
-            true_sev = gt.get("severity")
-            if true_sev is None:
-                true_sev = record["input"]["alert"].get("severity", "medium")
-            true_severities.append(true_sev)
-        
-        if isinstance(pred.get("investigation_required"), bool):
-            pred_investigation.append(pred["investigation_required"])
-            # Compute expected investigation_required
-            conf = gt.get("confidence", 0.5)
-            if true_cls == "benign" and conf >= 0.75:
-                true_investigation.append(False)
-            else:
-                true_investigation.append(True)
+        # Classification / severity comparison (only if GT is structured)
+        if gt is not None and isinstance(gt, dict):
+            pred_cls = pred.get("classification", "UNKNOWN")
+            true_cls = gt.get("classification", "UNKNOWN")
+            pred_classifications.append(pred_cls)
+            true_classifications.append(true_cls)
+            
+            if pred.get("severity") and gt.get("severity"):
+                pred_severities.append(pred["severity"])
+                true_sev = gt.get("severity")
+                if true_sev is None and record_format == "v0.4_raw":
+                    true_sev = record["input"]["alert"].get("severity", "medium")
+                if true_sev is not None:
+                    true_severities.append(true_sev)
+            
+            if isinstance(pred.get("investigation_required"), bool):
+                pred_investigation.append(pred["investigation_required"])
+                conf = gt.get("confidence", 0.5)
+                if true_cls == "benign" and conf >= 0.75:
+                    true_investigation.append(False)
+                else:
+                    true_investigation.append(True)
     
     # Compute metrics
+    evaluated_count = total - parse_error_count
     report = {
         "label": label,
-        "disclaimer": "Held-out synthetic test performance. NOT real-world SOC accuracy.",
+        "disclaimer": "Held-out test performance. NOT real-world SOC accuracy.",
+        "record_format": record_format,
         "total_records": total,
         "parse_errors": parse_error_count,
-        "parse_success_rate": round((total - parse_error_count) / total, 4) if total > 0 else 0,
+        "parse_success_rate": round(evaluated_count / total, 4) if total > 0 else 0,
+        "exact_text_match_rate": round(exact_text_match_count / total, 4) if total > 0 else 0,
         "structured_output_validity_rate": round(valid_structure_count / total, 4) if total > 0 else 0,
-        "evidence_reference_validity_rate": round(valid_evidence_count / total, 4) if total > 0 else 0,
-        "classification_accuracy": round(compute_accuracy(pred_classifications, true_classifications), 4),
-        "classification_per_class": compute_per_class_metrics(
+        "evaluated_at": datetime.now(timezone.utc).isoformat(),
+    }
+    
+    # Evidence refs only meaningful for v0.4
+    if record_format == "v0.4_raw":
+        report["evidence_reference_validity_rate"] = round(valid_evidence_count / total, 4) if total > 0 else 0
+    
+    # Classification metrics (only if we had structured GT)
+    if pred_classifications:
+        report["classification_accuracy"] = round(
+            compute_accuracy(pred_classifications, true_classifications), 4
+        )
+        report["classification_per_class"] = compute_per_class_metrics(
             pred_classifications, true_classifications, VALID_CLASSIFICATIONS
-        ),
-        "severity_accuracy": round(compute_accuracy(pred_severities, true_severities), 4) if true_severities else None,
-        "investigation_required_accuracy": round(
+        )
+    
+    if true_severities:
+        report["severity_accuracy"] = round(
+            compute_accuracy(pred_severities, true_severities), 4
+        )
+    
+    if true_investigation:
+        report["investigation_required_accuracy"] = round(
             compute_accuracy(
                 [str(p) for p in pred_investigation],
                 [str(t) for t in true_investigation],
             ), 4
-        ) if true_investigation else None,
-        "evaluated_at": datetime.now(timezone.utc).isoformat(),
-    }
+        )
     
     return report
 
@@ -408,8 +494,8 @@ def main():
     parser.add_argument(
         "--test-file",
         type=str,
-        default="datasets/finetuning/v0.4/test.jsonl",
-        help="Path to held-out test set",
+        default="datasets/finetuning/v1.0/test.jsonl",
+        help="Path to held-out test set (v1.0 SFT or v0.4 raw format)",
     )
     parser.add_argument(
         "--output-dir",
@@ -448,7 +534,9 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
     
     records = load_test_set(test_path)
+    record_format = detect_format(records)
     print(f"\n  Test records loaded: {len(records)}")
+    print(f"  Record format:       {record_format}")
     
     # Determine what to evaluate
     baseline_report = None
@@ -462,12 +550,12 @@ def main():
         if baseline_pred_path.exists():
             with open(baseline_pred_path) as f:
                 baseline_preds = json.load(f)
-            baseline_report = evaluate(baseline_preds, records, "baseline")
+            baseline_report = evaluate(baseline_preds, records, "baseline", record_format)
         
         if finetuned_pred_path.exists():
             with open(finetuned_pred_path) as f:
                 finetuned_preds = json.load(f)
-            finetuned_report = evaluate(finetuned_preds, records, "finetuned")
+            finetuned_report = evaluate(finetuned_preds, records, "finetuned", record_format)
     else:
         # Full inference mode — requires GPU
         try:
@@ -485,7 +573,7 @@ def main():
             print("  Use --metrics-only for CPU-based metric computation.")
             sys.exit(1)
         
-        system_prompt = get_triage_system_prompt()
+        system_prompt = get_triage_system_prompt()  # Used for v0.4; v1.0 uses its own system prompts
         
         # Load config to get model name
         from finetuning.train_lora import load_config
@@ -518,8 +606,8 @@ def main():
                 device_map="auto",
             )
             
-            baseline_preds = run_inference_batch(records, model, tokenizer, system_prompt)
-            baseline_report = evaluate(baseline_preds, records, "baseline")
+            baseline_preds = run_inference_batch(records, model, tokenizer, system_prompt, record_format=record_format)
+            baseline_report = evaluate(baseline_preds, records, "baseline", record_format)
             
             # Save predictions
             with open(output_dir / "baseline_predictions.json", "w") as f:
@@ -550,8 +638,8 @@ def main():
             )
             model = PeftModel.from_pretrained(model, str(adapter_path))
             
-            finetuned_preds = run_inference_batch(records, model, tokenizer, system_prompt)
-            finetuned_report = evaluate(finetuned_preds, records, "finetuned")
+            finetuned_preds = run_inference_batch(records, model, tokenizer, system_prompt, record_format=record_format)
+            finetuned_report = evaluate(finetuned_preds, records, "finetuned", record_format)
             
             # Save predictions
             with open(output_dir / "finetuned_predictions.json", "w") as f:
