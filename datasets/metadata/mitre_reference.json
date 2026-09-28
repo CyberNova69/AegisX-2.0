@@ -126,6 +126,12 @@
     "description": "Adversaries may use a single common password against many accounts to avoid lockouts."
   },
   {
+    "technique_id": "T1110",
+    "technique_name": "Brute Force",
+    "tactic": "Credential Access",
+    "description": "Adversaries may use brute force techniques to gain access to accounts by repeatedly attempting to guess credentials. This includes automated tools that submit many password attempts against SSH, RDP, web applications, or other authentication services. Multiple failed login attempts from the same source IP are a common indicator of brute force activity targeting user or administrator accounts."
+  },
+  {
     "technique_id": "T1087.002",
     "technique_name": "Domain Account Discovery",
     "tactic": "Discovery",
@@ -178,6 +184,12 @@
     "technique_name": "DNS",
     "tactic": "Command and Control",
     "description": "Adversaries may communicate using DNS protocol for C2 or data tunneling."
+  },
+  {
+    "technique_id": "T1071",
+    "technique_name": "Application Layer Protocol",
+    "tactic": "Command and Control",
+    "description": "Adversaries may communicate with compromised systems using application layer protocols to avoid detection. C2 traffic is often disguised as normal outbound network connections using HTTP, HTTPS, or DNS. A workstation making repeated outbound connections to an external IP address may indicate beaconing to a command and control server. Analysts should monitor for unusual volumes of outbound traffic, unexpected external connections, or periodic network communication patterns consistent with C2 activity."
   },
   {
     "technique_id": "T1486",

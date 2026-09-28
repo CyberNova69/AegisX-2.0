@@ -449,5 +449,115 @@ class TestInvestigationAgent(unittest.TestCase):
         self.assertNotIn("import anthropic", source_text)
         self.assertIn("from ai.llm import LLMClient", source_text)
 
+    # -------------------------------------------------------------------------
+    # RAG Runtime Grounding Tests
+    # -------------------------------------------------------------------------
+    def test_investigation_request_with_rag_context(self):
+        """InvestigationRequest from_dict and to_dict preserve rag_context."""
+        data = {
+            "investigation_id": "INV-RAG-001",
+            "alert": self.scenario["alert"],
+            "triage_result": {"classification": "suspicious", "severity": "high"},
+            "initial_evidence": self.scenario["initial_evidence"],
+            "context": self.scenario["context"],
+            "rag_context": "=== RETRIEVED THREAT INTELLIGENCE & MITRE KNOWLEDGE ===\n[Source: MITRE T1059.001]\nPowerShell execution.",
+        }
+        req = InvestigationRequest.from_dict(data)
+        self.assertIsNotNone(req.rag_context)
+        self.assertIn("MITRE T1059.001", req.rag_context)
+
+        serialized = req.to_dict()
+        self.assertEqual(serialized.get("rag_context"), req.rag_context)
+
+    def test_decision_prompt_includes_rag_context(self):
+        """format_investigation_decision_prompt renders RAG context when present."""
+        from ai.prompts.investigation import format_investigation_decision_prompt
+
+        req_with_rag = InvestigationRequest(
+            investigation_id="INV-RAG-002",
+            alert=self.scenario["alert"],
+            triage_result={"classification": "suspicious", "severity": "high"},
+            initial_evidence=self.scenario["initial_evidence"],
+            context=self.scenario["context"],
+            rag_context="[Source: MITRE T1059.001: PowerShell]\nExecution technique details.",
+        )
+        prompt = format_investigation_decision_prompt(
+            request=req_with_rag,
+            steps=[],
+            available_tools={"process_activity": "Query process telemetry"},
+            max_steps=5,
+        )
+        self.assertIn("=== RETRIEVED THREAT INTELLIGENCE & MITRE KNOWLEDGE ===", prompt)
+        self.assertIn("MITRE T1059.001: PowerShell", prompt)
+
+        # Ensure prompt without RAG does not include the heading
+        req_without_rag = InvestigationRequest(
+            investigation_id="INV-NO-RAG",
+            alert=self.scenario["alert"],
+            triage_result={"classification": "suspicious", "severity": "high"},
+            initial_evidence=self.scenario["initial_evidence"],
+            context=self.scenario["context"],
+            rag_context=None,
+        )
+        prompt_plain = format_investigation_decision_prompt(
+            request=req_without_rag,
+            steps=[],
+            available_tools={"process_activity": "Query process telemetry"},
+            max_steps=5,
+        )
+        self.assertNotIn("=== RETRIEVED THREAT INTELLIGENCE & MITRE KNOWLEDGE ===", prompt_plain)
+
+    def test_conclusion_prompt_includes_rag_context(self):
+        """format_investigation_conclusion_prompt renders RAG context when present."""
+        from ai.prompts.investigation import format_investigation_conclusion_prompt
+
+        req_with_rag = InvestigationRequest(
+            investigation_id="INV-RAG-003",
+            alert=self.scenario["alert"],
+            triage_result={"classification": "suspicious", "severity": "high"},
+            initial_evidence=self.scenario["initial_evidence"],
+            context=self.scenario["context"],
+            rag_context="[Source: Threat Intel Indicator 198.51.100.25]\nKnown Cobalt Strike C2.",
+        )
+        prompt = format_investigation_conclusion_prompt(
+            request=req_with_rag,
+            steps=[],
+            accumulated_evidence=self.scenario["initial_evidence"],
+        )
+        self.assertIn("=== RETRIEVED THREAT INTELLIGENCE & MITRE KNOWLEDGE ===", prompt)
+        self.assertIn("Known Cobalt Strike C2", prompt)
+
+    def test_investigation_agent_end_to_end_with_rag(self):
+        """InvestigationAgent propagates rag_context to InvestigationResult and prompts."""
+        rag_text = "=== RETRIEVED THREAT INTELLIGENCE ===\nTechnique: T1059.001 PowerShell"
+        req = InvestigationRequest(
+            investigation_id="INV-RAG-E2E",
+            alert=self.scenario["alert"],
+            triage_result={"classification": "suspicious", "severity": "high"},
+            initial_evidence=self.scenario["initial_evidence"],
+            context=self.scenario["context"],
+            rag_context=rag_text,
+        )
+
+        provider = MockProvider()
+        captured_prompts = []
+
+        # Intercept generated prompt in mock provider
+        orig_gen = provider.generate
+        def intercepting_gen(llm_req):
+            captured_prompts.append(llm_req.user_prompt)
+            return orig_gen(llm_req)
+        provider.generate = intercepting_gen
+
+        agent = InvestigationAgent(llm_client=LLMClient(provider=provider))
+        result = agent.investigate(req)
+
+        self.assertEqual(result.rag_context, rag_text)
+        self.assertEqual(result.to_dict().get("rag_context"), rag_text)
+        # Verify the prompt sent to the LLM indeed contained the RAG threat knowledge
+        self.assertTrue(any("=== RETRIEVED THREAT INTELLIGENCE & MITRE KNOWLEDGE ===" in p for p in captured_prompts))
+        self.assertTrue(any("Technique: T1059.001 PowerShell" in p for p in captured_prompts))
+
+
 if __name__ == "__main__":
     unittest.main()

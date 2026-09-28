@@ -12,6 +12,7 @@ from typing import Any, Dict, List, Optional
 from ai.rag.embeddings import BM25Scorer
 from ai.rag.ingest import DocumentIngester, DocumentChunk
 from ai.rag.retriever import RAGRetriever, RetrievalResult
+from ai.rag.reranker import RerankerConfig, ConditionalRerankerStage
 from ai.tools.synthetic_threat_intel import get_threat_intel
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
@@ -30,11 +31,14 @@ class RAGPipeline:
         chunk_size: int = 400,
         chunk_overlap: int = 50,
         retriever: Optional[RAGRetriever] = None,
+        reranker_config: Optional[RerankerConfig] = None,
     ):
         self.top_k = top_k
         self.similarity_threshold = similarity_threshold
         self.ingester = DocumentIngester(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
         self.retriever = retriever or RAGRetriever(scorer=BM25Scorer())
+        self.reranker_config = reranker_config or RerankerConfig()
+        self.reranker_stage = ConditionalRerankerStage(config=self.reranker_config)
         self.is_initialized: bool = False
 
     @classmethod
@@ -45,6 +49,7 @@ class RAGPipeline:
         threshold = 0.05
         chunk_size = 400
         chunk_overlap = 50
+        reranker_config = RerankerConfig()
 
         if cfg_file.exists():
             try:
@@ -57,6 +62,8 @@ class RAGPipeline:
                 chk_cfg = cfg.get("chunking", {})
                 chunk_size = chk_cfg.get("chunk_size", chunk_size)
                 chunk_overlap = chk_cfg.get("chunk_overlap", chunk_overlap)
+                reranker_cfg = cfg.get("reranker", {})
+                reranker_config = RerankerConfig.from_dict(reranker_cfg)
             except Exception:
                 pass
 
@@ -65,6 +72,7 @@ class RAGPipeline:
             similarity_threshold=threshold,
             chunk_size=chunk_size,
             chunk_overlap=chunk_overlap,
+            reranker_config=reranker_config,
         )
 
     def initialize(
@@ -98,7 +106,15 @@ class RAGPipeline:
 
         k = top_k if top_k is not None else self.top_k
         thresh = threshold if threshold is not None else self.similarity_threshold
-        return self.retriever.retrieve(query=query_text, top_k=k, threshold=thresh)
+
+        # Fast path: If reranker feature flag is disabled, return native BM25 results directly
+        if not self.reranker_config.enabled or self.reranker_config.mode == "off":
+            return self.retriever.retrieve(query=query_text, top_k=k, threshold=thresh)
+
+        # Reranker path: Retrieve candidate_k BM25 candidates then route to conditional reranker stage
+        candidate_k = max(k, self.reranker_config.candidate_k)
+        candidates = self.retriever.retrieve(query=query_text, top_k=candidate_k, threshold=thresh)
+        return self.reranker_stage.rerank(query=query_text, bm25_results=candidates, output_k=k)
 
     def query_indicator(self, indicator: str) -> Dict[str, Any]:
         """

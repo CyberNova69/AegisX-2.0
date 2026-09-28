@@ -7,6 +7,25 @@ retrieval:
   similarity_threshold: 0.05
   algorithm: "bm25"  # Options: "bm25", "tfidf"
 
+reranker:
+  enabled: false                       # Feature flag: default MUST be false for production safety
+  mode: "conditional"                  # Options: "off", "conditional", "always"
+  model: "cross-encoder/ms-marco-MiniLM-L-6-v2"
+  candidate_k: 10                      # Stage 1 candidate pool for reranking
+  output_k: 3                          # Final top-k context count
+  strategy: "domain_diversity"         # Strategy C: domain diversity preservation
+  fallback: "bm25"                     # Automated fallback on exception/timeout
+  score_margin_threshold: 1.200        # Low margin threshold triggering reranker on raw BM25 scale
+  high_margin_bypass: 5.000            # Decisive BM25 score margin triggering bypass
+  exact_margin_bypass: 1.200           # Exact IOC / MITRE margin triggering bypass
+
+canary:
+  enabled: false                       # Feature flag: default MUST be false for production safety
+  percentage: 0                        # Valid canary stages: 0, 5, 10, 25, 50
+  deterministic: true                  # Consistent hashing across runs
+  fallback: "bm25"                     # Deterministic fallback path
+
+
 chunking:
   chunk_size: 400
   chunk_overlap: 50

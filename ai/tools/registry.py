@@ -6,7 +6,7 @@ Central registry and allowlist mechanism for all read-only investigation tools.
 Ensures the LLM cannot execute arbitrary or unapproved tools.
 """
 
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from ai.tools.base import BaseInvestigationTool
 
@@ -46,7 +46,11 @@ class ToolRegistry:
         """Return mapping of tool name to purpose description for prompting."""
         return {name: tool.description for name, tool in self._tools.items()}
 
-def create_default_registry(include_threat_intel: bool = False) -> ToolRegistry:
+def create_default_registry(
+    include_threat_intel: bool = False,
+    use_database: bool = False,
+    db_pool: Optional[Any] = None,
+) -> ToolRegistry:
     """
     Factory creating a ToolRegistry populated with the approved read-only tools:
       - process_activity
@@ -54,22 +58,40 @@ def create_default_registry(include_threat_intel: bool = False) -> ToolRegistry:
       - authentication
       - file_activity
       - related_alerts
-    Optionally includes (Phase 5):
+    Optionally includes:
       - threat_intel
       - mitre_lookup
-    """
-    from ai.tools.process_tool import ProcessActivityTool
-    from ai.tools.network_tool import NetworkActivityTool
-    from ai.tools.auth_tool import AuthenticationTool
-    from ai.tools.file_tool import FileActivityTool
-    from ai.tools.alerts_tool import RelatedAlertsTool
 
+    When use_database=True, registers DB-backed tools from db_tools.py with
+    safe fallback.
+    """
     registry = ToolRegistry()
-    registry.register(ProcessActivityTool())
-    registry.register(NetworkActivityTool())
-    registry.register(AuthenticationTool())
-    registry.register(FileActivityTool())
-    registry.register(RelatedAlertsTool())
+
+    if use_database:
+        from ai.tools.db_tools import (
+            DBProcessActivityTool,
+            DBNetworkActivityTool,
+            DBAuthenticationTool,
+            DBFileActivityTool,
+            DBRelatedAlertsTool,
+        )
+        registry.register(DBProcessActivityTool(db_pool=db_pool))
+        registry.register(DBNetworkActivityTool(db_pool=db_pool))
+        registry.register(DBAuthenticationTool(db_pool=db_pool))
+        registry.register(DBFileActivityTool(db_pool=db_pool))
+        registry.register(DBRelatedAlertsTool(db_pool=db_pool))
+    else:
+        from ai.tools.process_tool import ProcessActivityTool
+        from ai.tools.network_tool import NetworkActivityTool
+        from ai.tools.auth_tool import AuthenticationTool
+        from ai.tools.file_tool import FileActivityTool
+        from ai.tools.alerts_tool import RelatedAlertsTool
+
+        registry.register(ProcessActivityTool())
+        registry.register(NetworkActivityTool())
+        registry.register(AuthenticationTool())
+        registry.register(FileActivityTool())
+        registry.register(RelatedAlertsTool())
 
     if include_threat_intel:
         from ai.tools.threat_intel_tool import ThreatIntelTool
@@ -79,7 +101,7 @@ def create_default_registry(include_threat_intel: bool = False) -> ToolRegistry:
 
     return registry
 
-def create_threat_intel_registry() -> ToolRegistry:
+def create_threat_intel_registry(use_database: bool = False, db_pool: Optional[Any] = None) -> ToolRegistry:
     """Convenience factory creating a ToolRegistry with all 7 investigation and intelligence tools."""
-    return create_default_registry(include_threat_intel=True)
+    return create_default_registry(include_threat_intel=True, use_database=use_database, db_pool=db_pool)
 

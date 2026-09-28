@@ -167,11 +167,13 @@ class InvestigationAgent:
             step_evidence_ids: List[str] = []
             if tool_result.success:
                 for item in tool_result.evidence:
-                    if isinstance(item, dict) and "id" in item:
-                        eid = item["id"]
-                        step_evidence_ids.append(eid)
-                        valid_evidence_ids.add(eid)
-                        accumulated_evidence.append(item)
+                    if isinstance(item, dict):
+                        # Support both synthetic ('id') and DB ('evidence_id') key formats
+                        eid = item.get("id") or item.get("evidence_id")
+                        if eid:
+                            step_evidence_ids.append(eid)
+                            valid_evidence_ids.add(eid)
+                            accumulated_evidence.append(item)
 
             step_record = InvestigationStep(
                 step_number=current_step_num,
@@ -322,4 +324,5 @@ class InvestigationAgent:
             recommended_actions=validated_actions,
             limitations=limitations,
             metadata=metadata,
+            rag_context=request.rag_context,
         )

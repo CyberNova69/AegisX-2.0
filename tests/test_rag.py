@@ -81,9 +81,9 @@ class TestDocumentIngestion(unittest.TestCase):
         self.ingester = DocumentIngester(chunk_size=300, chunk_overlap=50)
 
     def test_load_mitre_reference_all_records(self):
-        """Ingester loads all 34 MITRE ATT&CK techniques."""
+        """Ingester loads all 36 MITRE ATT&CK techniques (34 original + 2 parent bridge entries: T1110, T1071)."""
         docs = self.ingester.load_mitre_reference()
-        self.assertEqual(len(docs), 34)
+        self.assertEqual(len(docs), 36)
         first = docs[0]
         self.assertIsInstance(first, Document)
         self.assertEqual(first.source_type, "mitre_technique")
@@ -124,7 +124,7 @@ class TestBM25Retriever(unittest.TestCase):
         self.retriever.index(self.chunks)
 
     def test_retriever_indexed_count(self):
-        """Retriever successfully indexes chunks from MITRE and threat intel."""
+        """Retriever successfully indexes chunks from MITRE and threat intel (36 MITRE + 13 TI = 49 total)."""
         self.assertTrue(self.retriever.count() >= 40)
 
     def test_retrieve_exact_ip_indicator(self):

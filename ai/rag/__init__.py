@@ -9,6 +9,12 @@ from ai.rag.ingest import Document, DocumentChunk, DocumentIngester
 from ai.rag.embeddings import BaseScorer, BM25Scorer
 from ai.rag.retriever import RAGRetriever, RetrievalResult
 from ai.rag.pipeline import RAGPipeline, create_default_rag_pipeline
+from ai.rag.reranker import (
+    RerankerConfig,
+    ConditionalRerankerStage,
+    RerankerMetrics,
+    RerankerModelManager,
+)
 
 __all__ = [
     "Document",
@@ -20,4 +26,8 @@ __all__ = [
     "RetrievalResult",
     "RAGPipeline",
     "create_default_rag_pipeline",
+    "RerankerConfig",
+    "ConditionalRerankerStage",
+    "RerankerMetrics",
+    "RerankerModelManager",
 ]

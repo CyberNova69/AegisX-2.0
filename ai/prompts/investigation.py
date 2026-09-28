@@ -67,6 +67,13 @@ def format_investigation_decision_prompt(
     for evt in request.initial_evidence:
         prompt_lines.append(f"[{evt.get('id', 'EVT')}] {evt.get('description', '')}")
 
+    if request.rag_context:
+        prompt_lines.extend([
+            "",
+            "=== RETRIEVED THREAT INTELLIGENCE & MITRE KNOWLEDGE ===",
+            request.rag_context.strip(),
+        ])
+
     # Add history of investigation steps taken so far
     if steps:
         prompt_lines.extend(["", "=== COMPLETED INVESTIGATION STEPS ==="])
@@ -132,6 +139,13 @@ def format_investigation_conclusion_prompt(
         valid_ids.append(eid)
         desc = evt.get("description", "")
         prompt_lines.append(f"[{eid}] {desc}")
+
+    if request.rag_context:
+        prompt_lines.extend([
+            "",
+            "=== RETRIEVED THREAT INTELLIGENCE & MITRE KNOWLEDGE ===",
+            request.rag_context.strip(),
+        ])
 
     prompt_lines.extend([
         "",

@@ -121,6 +121,7 @@ class InvestigationRequest:
     triage_result: Union[TriageResult, Dict[str, Any]]
     initial_evidence: List[Dict[str, Any]]
     context: Dict[str, Any]
+    rag_context: Optional[str] = None
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "InvestigationRequest":
@@ -128,7 +129,10 @@ class InvestigationRequest:
             raise ValueError("InvestigationRequest requires an 'alert' dictionary.")
         if "context" not in data or not isinstance(data["context"], dict):
             raise ValueError("InvestigationRequest requires a 'context' dictionary.")
-        if "initial_evidence" not in data or not isinstance(data["initial_evidence"], list):
+        initial_ev = data.get("initial_evidence")
+        if initial_ev is None:
+            initial_ev = data.get("evidence")
+        if not isinstance(initial_ev, list):
             raise ValueError("InvestigationRequest requires an 'initial_evidence' list.")
         
         triage_res = data.get("triage_result", {})
@@ -143,8 +147,9 @@ class InvestigationRequest:
             investigation_id=data.get("investigation_id", f"INV-{data.get('alert', {}).get('id', '001')}"),
             alert=data["alert"],
             triage_result=triage_obj,
-            initial_evidence=data["initial_evidence"],
+            initial_evidence=initial_ev,
             context=data["context"],
+            rag_context=data.get("rag_context"),
         )
 
     def get_valid_evidence_ids(self) -> set:
@@ -161,13 +166,16 @@ class InvestigationRequest:
             if hasattr(self.triage_result, "to_dict")
             else self.triage_result
         )
-        return {
+        res = {
             "investigation_id": self.investigation_id,
             "alert": self.alert,
             "triage_result": triage_dict,
             "initial_evidence": self.initial_evidence,
             "context": self.context,
         }
+        if self.rag_context is not None:
+            res["rag_context"] = self.rag_context
+        return res
 
 @dataclass
 class InvestigationResult:
@@ -184,6 +192,7 @@ class InvestigationResult:
     recommended_actions: List[Dict[str, Any]] = field(default_factory=list)
     limitations: str = "Read-only synthetic investigation. No endpoint remediation performed."
     metadata: Dict[str, Any] = field(default_factory=dict)
+    rag_context: Optional[str] = None
 
     def __post_init__(self):
         if self.status not in VALID_INVESTIGATION_STATUSES:
@@ -194,7 +203,7 @@ class InvestigationResult:
             raise ValueError(f"Confidence {self.confidence} must be between 0.0 and 1.0.")
 
     def to_dict(self) -> Dict[str, Any]:
-        return {
+        res = {
             "investigation_id": self.investigation_id,
             "alert_id": self.alert_id,
             "status": self.status,
@@ -208,3 +217,14 @@ class InvestigationResult:
             "limitations": self.limitations,
             "metadata": self.metadata,
         }
+        if self.rag_context is not None:
+            res["rag_context"] = self.rag_context
+        return res
+
+    @property
+    def total_steps(self) -> int:
+        return len(self.investigation_steps)
+
+    @property
+    def classification(self) -> str:
+        return self.conclusion

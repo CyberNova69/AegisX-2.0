@@ -415,3 +415,6 @@ class ThreatIntelAgent:
                 "steps_executed": len(steps),
             },
         )
+
+    # Alias for orchestration compatibility
+    analyze = enrich
